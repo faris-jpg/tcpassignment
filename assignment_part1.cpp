@@ -14,11 +14,6 @@ void makeLower(string &str)
     }
 }
 
-void test(void){
-    cout << "test\n";
-    cout << "something isnt working" << endl;
-}
-
 void seperateWords(string str, vector<string> &commandWords)
 {
     stringstream inputStream(str);
