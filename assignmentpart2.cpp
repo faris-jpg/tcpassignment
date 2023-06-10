@@ -338,17 +338,10 @@ struct myProgram
             }
             system("Color 02");
             cout << argument << " has been loaded" << endl;
-            // print all data
-            for (auto a : table)
-            {
-                for (auto b : a)
-                {
-                    cout << b << " ";
-                }
-                cout << endl;
+            inputFile.close();
+
             }
         }
-    }
     void show() {}
     void store() {}
     void clone() {}
@@ -411,7 +404,63 @@ struct myProgram
             }
         }
     }
-    void findMax() {}
+    void findMax() {
+        if (!correctSyntax)
+        {
+            system("Color 04");
+            cout << "syntax error" << endl
+                 << "max <column>" << endl;
+            return;
+        }
+        int max;
+        if (numWords == 1)
+        {
+            for (int i = 0; i < numColumns; i++)
+            {
+                if (columnTypes[i] == "number")
+                {
+                    max = stoi(table[0][i]);
+                    for (int j = 1; j < numRows; j++)
+                    {
+                        if (stoi(table[j][i]) > max)
+                        {
+                            max = stoi(table[j][i]);
+                        }
+                    }
+                    cout << "maximum of column " << columnNames[i]
+                         << " is " << max << endl;
+                }
+            }
+        }
+        else{
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1)
+            {
+                system("Color 04");
+                cout << "column does not exist" << endl;
+                return;
+            }
+            else if (columnTypes[columnNumber] != "number")
+            {
+                system("Color 04");
+                cout << "column is not of type number" << endl;
+                return;
+            }
+            else
+            {
+                max = stoi(table[0][columnNumber]);
+                for (int j = 1; j < numRows; j++)
+                {
+                    if (stoi(table[j][columnNumber]) > max)
+                    {
+                        max = stoi(table[j][columnNumber]);
+                    }
+                }
+                cout << "maximum of column " << columnNames[columnNumber]
+                     << " is " << max << endl;
+            }
+        }
+    }
     void findMedian() {}
     void findMean() {}
     void variance() {}
