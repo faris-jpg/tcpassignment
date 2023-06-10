@@ -153,6 +153,17 @@ int checkColumn(string column, vector<string> columnNames)
     return -1;
 }
 
+float findMean(vector<vector<string>> table, int columnNumber)
+{
+    // finds the mean of a column
+    float sum = 0;
+    for (int i = 0; i < table.size(); i++)
+    {
+        sum += stoi(table[i][columnNumber]);
+    }
+    return sum / table.size();
+}
+
 float findVariance(vector<vector<string>> table, int columnNumber)
 {
     // finds the variance of a column
@@ -161,16 +172,13 @@ float findVariance(vector<vector<string>> table, int columnNumber)
     //  squares that
     //  finds the mean of the squared differences
     float mean, sum = 0;
-    for(int i = 0; i < table.size(); i++){
-        sum += stoi(table[i][columnNumber]);
-    }
-    mean = sum / table.size();
+    mean = findMean(table, columnNumber);
     sum = 0;
-    for(int i = 0; i < table.size(); i++){
+    for (int i = 0; i < table.size(); i++)
+    {
         sum += pow(stoi(table[i][columnNumber]) - mean, 2);
     }
     return sum / table.size();
-
 }
 
 vector<int> sortColumn(vector<int> &column)
@@ -245,7 +253,7 @@ struct myProgram
             findMedian();
             break;
         case 8: // mean
-            findMean();
+            mean();
             break;
         case 9: // variance
             variance();
@@ -595,9 +603,9 @@ struct myProgram
             }
         }
     }
-    void findMean()
+    void mean()
     {
-        cout << setprecision(2) << fixed;
+        cout << setprecision(4) << fixed;
         if (!correctSyntax)
         {
             system("Color 04");
@@ -611,13 +619,9 @@ struct myProgram
             {
                 if (columnTypes[i] == "number")
                 {
-                    float sum = 0;
-                    for (int j = 0; j < numRows; j++)
-                    {
-                        sum += stoi(table[j][i]);
-                    }
+                    
                     cout << "mean of column " << columnNames[i]
-                         << " is " << sum / numRows << endl;
+                         << " is " << findMean(table, i) << endl;
                 }
             }
         }
@@ -638,13 +642,9 @@ struct myProgram
             }
             else
             {
-                float sum = 0;
-                for (int j = 0; j < numRows; j++)
-                {
-                    sum += stoi(table[j][columnNumber]);
-                }
+                
                 cout << "mean of column " << columnNames[columnNumber]
-                     << " is " << sum / numRows << endl;
+                     << " is " << findMean(table, columnNumber) << endl;
             }
         }
     }
@@ -657,17 +657,19 @@ struct myProgram
         square that
         find the mean of the squared differences
         */
-       cout << setprecision(2) << fixed;
-       float mean, variance, sum = 0;
-        if(!correctSyntax){
+        cout << setprecision(4) << fixed;
+        float mean, variance, sum = 0;
+        if (!correctSyntax)
+        {
             system("Color 04");
             cout << "syntax error" << endl
                  << "variance <column> (optional)" << endl;
             return;
         }
-        if(numWords == 1){
+        if (numWords == 1)
+        {
             for (int i = 0; i < numColumns; i++)
-            { //for eahc column
+            { // for eahc column
                 if (columnTypes[i] == "number")
                 {
                     variance = findVariance(table, i);
@@ -675,9 +677,9 @@ struct myProgram
                          << " is " << variance << endl;
                 }
             }
-
         }
-        else {
+        else
+        {
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1)
             {
@@ -699,24 +701,26 @@ struct myProgram
             }
         }
     }
-    void stdv() 
+    void stdv()
     {
-                /*
+        /*
         to find stdv
         find variance
         square root that
         */
-       cout << setprecision(2) << fixed;
-       float mean, variance, sum = 0;
-        if(!correctSyntax){
+        cout << setprecision(4) << fixed;
+        float mean, variance, sum = 0;
+        if (!correctSyntax)
+        {
             system("Color 04");
             cout << "syntax error" << endl
                  << "stdv <column> (optional)" << endl;
             return;
         }
-        if(numWords == 1){
+        if (numWords == 1)
+        {
             for (int i = 0; i < numColumns; i++)
-            { //for eahc column
+            { // for eahc column
                 if (columnTypes[i] == "number")
                 {
                     variance = findVariance(table, i);
@@ -724,9 +728,9 @@ struct myProgram
                          << " is " << sqrt(variance) << endl;
                 }
             }
-
         }
-        else {
+        else
+        {
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1)
             {
@@ -748,10 +752,116 @@ struct myProgram
             }
         }
     }
-    void sum() {}
-    void difference() {}
-    void corr() {}
-    void regression() {}
+    void sum()
+    {
+        if (!correctSyntax)
+        {
+            system("Color 04");
+            cout << "syntax error" << endl
+                 << "sum <column1> <column2>" << endl;
+            return;
+        }
+        int columnNumber1 = checkColumn(commandWords[1], columnNames);
+        int columnNumber2 = checkColumn(commandWords[2], columnNames);
+        if (columnNumber1 == -1 || columnNumber2 == -1)
+        {
+            system("Color 04");
+            cout << "one of the columns does not exist" << endl;
+            return;
+        }
+        else if (columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+        {
+            system("Color 04");
+            cout << "one of the columns is not of type number" << endl;
+            return;
+        }
+        else
+        {
+            int add, sum = 0;
+            for (int j = 0; j < numRows; j++)
+            {
+                add = stoi(table[j][columnNumber1]) + stoi(table[j][columnNumber2]);
+                cout << add << endl;
+                sum += add;
+            }
+            cout << "total sum of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+                 << " is " << sum << endl;
+        }
+    }
+    void difference()
+    {
+        if (!correctSyntax)
+        {
+            system("Color 04");
+            cout << "syntax error" << endl
+                 << "sum <column1> <column2>" << endl;
+            return;
+        }
+        int columnNumber1 = checkColumn(commandWords[1], columnNames);
+        int columnNumber2 = checkColumn(commandWords[2], columnNames);
+        if (columnNumber1 == -1 || columnNumber2 == -1)
+        {
+            system("Color 04");
+            cout << "one of the columns does not exist" << endl;
+            return;
+        }
+        else if (columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+        {
+            system("Color 04");
+            cout << "one of the columns is not of type number" << endl;
+            return;
+        }
+        else
+        {
+            int diff, sum = 0;
+            for (int j = 0; j < numRows; j++)
+            {
+                diff = stoi(table[j][columnNumber1]) - stoi(table[j][columnNumber2]);
+                cout << diff << endl;
+                sum += diff;
+            }
+            cout << "total difference of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+                 << " is " << sum << endl;
+        }
+    }
+    void corr()
+    {
+        /*
+        based on formula from wikipedia
+        find mean for each column
+        numerator = sum of (x - mean1) * (y - mean2)
+        denominator1 = sum of (x - mean1)^2
+        denominator2 = sum of (y - mean2)^2
+        denominator = root of (denominator1 * denominator2)
+        correlation = numerator / denominator
+        */
+        if (!correctSyntax)
+        {
+            system("Color 04");
+            cout << "syntax error" << endl
+                 << "corr <column1> <column2>" << endl;
+            return;
+        }
+        int columnNumber1 = checkColumn(commandWords[1], columnNames);
+        int columnNumber2 = checkColumn(commandWords[2], columnNames);
+        float mean1 = findMean(table, columnNumber1);
+        float mean2 = findMean(table, columnNumber2);
+        float numerator = 0, denominator1 = 0, denominator2 = 0, denominator = 0;
+        for (int i = 0; i < numRows; i++)
+        {
+            numerator += (stoi(table[i][columnNumber1]) - mean1) * (stoi(table[i][columnNumber2]) - mean2);
+            denominator1 += pow(stoi(table[i][columnNumber1]) - mean1, 2);
+            denominator2 += pow(stoi(table[i][columnNumber2]) - mean2, 2);
+        }
+        denominator = sqrt(denominator1 * denominator2);
+        cout << "correlation between columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+             << " is " << numerator / denominator << endl;
+
+    }
+    void regression() 
+    {
+
+    }
     void titles() {}
     void report() {}
     void rows() {}
