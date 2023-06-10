@@ -133,6 +133,18 @@ bool checkSyntax(vector<string> &commandWords, int modeNumber, int numColumns)
     }
 }
 
+int checkColumn(string column, vector<string> columnNames)
+{
+    for (int i = 0; i < columnNames.size(); i++)
+    {
+        if (column == columnNames[i])
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 struct myProgram
 {
     int numWords, numColumns, numRows, modeNumber;
@@ -249,6 +261,10 @@ struct myProgram
         case 31: // exit
             cout << "exiting..." << endl;
             break;
+        case -1:
+            system("Color 04");
+            cout << "invalid command" << endl;
+            break;
         }
     }
     void load()
@@ -290,7 +306,7 @@ struct myProgram
         {
             inputFile >> numColumns >> numRows;
             string row;
-            int rowCounter = 0;
+            int rowCounter = -1;
             while (getline(inputFile, row))
             {
                 vector<string> rowVector;
@@ -337,7 +353,64 @@ struct myProgram
     void store() {}
     void clone() {}
     void html() {}
-    void findMin() {}
+    void findMin()
+    {
+        if (!correctSyntax)
+        {
+            system("Color 04");
+            cout << "syntax error" << endl
+                 << "min <column>" << endl;
+            return;
+        }
+        int min;
+        if (numWords == 1)
+        {
+            for (int i = 0; i < numColumns; i++)
+            {
+                if (columnTypes[i] == "number")
+                {
+                    min = stoi(table[0][i]);
+                    for (int j = 1; j < numRows; j++)
+                    {
+                        if (stoi(table[j][i]) < min)
+                        {
+                            min = stoi(table[j][i]);
+                        }
+                    }
+                    cout << "minimum of column " << columnNames[i]
+                         << " is " << min << endl;
+                }
+            }
+        }
+        else{
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1)
+            {
+                system("Color 04");
+                cout << "column does not exist" << endl;
+                return;
+            }
+            else if (columnTypes[columnNumber] != "number")
+            {
+                system("Color 04");
+                cout << "column is not of type number" << endl;
+                return;
+            }
+            else
+            {
+                min = stoi(table[0][columnNumber]);
+                for (int j = 1; j < numRows; j++)
+                {
+                    if (stoi(table[j][columnNumber]) < min)
+                    {
+                        min = stoi(table[j][columnNumber]);
+                    }
+                }
+                cout << "minimum of column " << columnNames[columnNumber]
+                     << " is " << min << endl;
+            }
+        }
+    }
     void findMax() {}
     void findMedian() {}
     void findMean() {}
@@ -358,7 +431,7 @@ struct myProgram
     void oddrows() {}
     void evenrows() {}
     void primes() {}
-    void man(){}
+    void man() {}
     void delete_() {}
     void insert() {}
     void replace() {}
