@@ -322,10 +322,12 @@ struct myProgram
             replace();
             break;
         case 31: // exit
+
             cout << "exiting..." << endl;
             break;
         case -1:
             system("Color 04");
+            cout << "\a";
             cout << "invalid command" << endl;
             break;
         }
@@ -336,6 +338,7 @@ struct myProgram
         {
             // if the syntax is incorrect, output error message
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "load <filename.csv>" << endl;
             return;
@@ -352,6 +355,7 @@ struct myProgram
                 {
                     // outputs error if not a csv file
                     system("Color 04");
+                    cout << "\a";
                     cout << "invalid file type" << endl
                          << "load <filename.csv>" << endl;
                     return;
@@ -368,6 +372,7 @@ struct myProgram
         {
             // if the file cannot be opened, output error message
             system("Color 04");
+            cout << "\a";
             cout << "file cannot be opened" << endl;
             return;
         }
@@ -419,6 +424,7 @@ struct myProgram
         if (!correctSyntax)
         { // if the syntax is incorrect, output error message
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "min <column> (optional)" << endl;
             return;
@@ -438,6 +444,7 @@ struct myProgram
                             min = stoi(table[j][i]);
                         }
                     }
+                    system("Color 02");
                     cout << "minimum of column " << columnNames[i]
                          << " is " << min << endl;
                 }
@@ -449,12 +456,14 @@ struct myProgram
             if (columnNumber == -1)
             { // checks if the column exists
                 system("Color 04");
+                cout << "\a";
                 cout << "column does not exist" << endl;
                 return;
             }
             else if (columnTypes[columnNumber] != "number")
             { // checks if the column is of type number
                 system("Color 04");
+                cout << "\a";
                 cout << "column is not of type number" << endl;
                 return;
             }
@@ -468,6 +477,7 @@ struct myProgram
                         min = stoi(table[j][columnNumber]);
                     }
                 }
+                system("Color 02");
                 cout << "minimum of column " << columnNames[columnNumber]
                      << " is " << min << endl;
             }
@@ -478,6 +488,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "max <column> (optional)" << endl;
             return;
@@ -497,6 +508,7 @@ struct myProgram
                             max = stoi(table[j][i]);
                         }
                     }
+                    system("Color 02");
                     cout << "maximum of column " << columnNames[i]
                          << " is " << max << endl;
                 }
@@ -508,12 +520,14 @@ struct myProgram
             if (columnNumber == -1)
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column does not exist" << endl;
                 return;
             }
             else if (columnTypes[columnNumber] != "number")
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column is not of type number" << endl;
                 return;
             }
@@ -527,6 +541,7 @@ struct myProgram
                         max = stoi(table[j][columnNumber]);
                     }
                 }
+                system("Color 02");
                 cout << "maximum of column " << columnNames[columnNumber]
                      << " is " << max << endl;
             }
@@ -537,6 +552,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "median <column> (optional)" << endl;
             return;
@@ -556,13 +572,15 @@ struct myProgram
                     sortedColumn = sortColumn(column);
                     if (numRows % 2)
                     {
+                        system("Color 02");
                         cout << "median of column " << columnNames[i]
                              << " is " << sortedColumn[numRows / 2] << endl;
                     }
                     else
                     {
+                        system("Color 02");
                         cout << "median of column " << columnNames[i]
-                             << " is " << (sortedColumn[numRows / 2] + sortedColumn[numRows / 2 - 1]) / 2 << endl;
+                             << " is " << (float)(sortedColumn[numRows / 2] + sortedColumn[numRows / 2 - 1]) / 2 << endl;
                     }
                 }
             }
@@ -573,12 +591,14 @@ struct myProgram
             if (columnNumber == -1)
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column does not exist" << endl;
                 return;
             }
             else if (columnTypes[columnNumber] != "number")
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column is not of type number" << endl;
                 return;
             }
@@ -592,13 +612,15 @@ struct myProgram
                 sortedColumn = sortColumn(column);
                 if (numRows % 2)
                 {
+                    system("Color 02");
                     cout << "median of column " << columnNames[columnNumber]
                          << " is " << sortedColumn[numRows / 2] << endl;
                 }
                 else
                 {
+                    system("Color 02");
                     cout << "median of column " << columnNames[columnNumber]
-                         << " is " << (sortedColumn[numRows / 2] + sortedColumn[numRows / 2 - 1]) / 2 << endl;
+                         << " is " << (float)(sortedColumn[numRows / 2] + sortedColumn[numRows / 2 - 1]) / 2 << endl;
                 }
             }
         }
@@ -609,6 +631,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "mean <column> (optional)" << endl;
             return;
@@ -619,7 +642,7 @@ struct myProgram
             {
                 if (columnTypes[i] == "number")
                 {
-                    
+                    system("Color 02");
                     cout << "mean of column " << columnNames[i]
                          << " is " << findMean(table, i) << endl;
                 }
@@ -631,18 +654,20 @@ struct myProgram
             if (columnNumber == -1)
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column does not exist" << endl;
                 return;
             }
             else if (columnTypes[columnNumber] != "number")
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column is not of type number" << endl;
                 return;
             }
             else
             {
-                
+                system("Color 02");
                 cout << "mean of column " << columnNames[columnNumber]
                      << " is " << findMean(table, columnNumber) << endl;
             }
@@ -662,6 +687,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "variance <column> (optional)" << endl;
             return;
@@ -673,6 +699,7 @@ struct myProgram
                 if (columnTypes[i] == "number")
                 {
                     variance = findVariance(table, i);
+                    system("Color 02");
                     cout << "variance of column " << columnNames[i]
                          << " is " << variance << endl;
                 }
@@ -684,18 +711,21 @@ struct myProgram
             if (columnNumber == -1)
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column does not exist" << endl;
                 return;
             }
             else if (columnTypes[columnNumber] != "number")
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column is not of type number" << endl;
                 return;
             }
             else
             {
                 variance = findVariance(table, columnNumber);
+                system("Color 02");
                 cout << "variance of column " << columnNames[columnNumber]
                      << " is " << variance << endl;
             }
@@ -713,6 +743,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "stdv <column> (optional)" << endl;
             return;
@@ -724,6 +755,7 @@ struct myProgram
                 if (columnTypes[i] == "number")
                 {
                     variance = findVariance(table, i);
+                    system("Color 02");
                     cout << "standard deviation of column " << columnNames[i]
                          << " is " << sqrt(variance) << endl;
                 }
@@ -735,18 +767,21 @@ struct myProgram
             if (columnNumber == -1)
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column does not exist" << endl;
                 return;
             }
             else if (columnTypes[columnNumber] != "number")
             {
                 system("Color 04");
+                cout << "\a";
                 cout << "column is not of type number" << endl;
                 return;
             }
             else
             {
                 variance = findVariance(table, columnNumber);
+                system("Color 02");
                 cout << "standard deviation of column " << columnNames[columnNumber]
                      << " is " << sqrt(variance) << endl;
             }
@@ -757,6 +792,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "sum <column1> <column2>" << endl;
             return;
@@ -766,17 +802,20 @@ struct myProgram
         if (columnNumber1 == -1 || columnNumber2 == -1)
         {
             system("Color 04");
+            cout << "\a";
             cout << "one of the columns does not exist" << endl;
             return;
         }
         else if (columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
         {
             system("Color 04");
+            cout << "\a";
             cout << "one of the columns is not of type number" << endl;
             return;
         }
         else
         {
+            system("Color 02");
             int add, sum = 0;
             for (int j = 0; j < numRows; j++)
             {
@@ -793,6 +832,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "sum <column1> <column2>" << endl;
             return;
@@ -802,17 +842,20 @@ struct myProgram
         if (columnNumber1 == -1 || columnNumber2 == -1)
         {
             system("Color 04");
+            cout << "\a";
             cout << "one of the columns does not exist" << endl;
             return;
         }
         else if (columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
         {
             system("Color 04");
+            cout << "\a";
             cout << "one of the columns is not of type number" << endl;
             return;
         }
         else
         {
+            system("Color 02");
             int diff, sum = 0;
             for (int j = 0; j < numRows; j++)
             {
@@ -838,6 +881,7 @@ struct myProgram
         if (!correctSyntax)
         {
             system("Color 04");
+            cout << "\a";
             cout << "syntax error" << endl
                  << "corr <column1> <column2>" << endl;
             return;
@@ -854,6 +898,7 @@ struct myProgram
             denominator2 += pow(stoi(table[i][columnNumber2]) - mean2, 2);
         }
         denominator = sqrt(denominator1 * denominator2);
+        system("Color 02");
         cout << "correlation between columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
              << " is " << numerator / denominator << endl;
 
@@ -878,13 +923,28 @@ struct myProgram
     void insert() {}
     void replace() {}
 };
+void interpreterActivate()
+{
+    system("cls");
+    system("Color 01");
+    cout << "program activated.\n";
+}
+
+void interpreterTerminate()
+{
+    system("Color 01");
+    cout << "\a";
+    cout << "program terminated.";
+}
 int main()
 {
+    interpreterActivate();
     myProgram program;
     while (program.command != "exit")
     {
         program.get();
         program.runner();
     }
+    interpreterTerminate();
     return 0;
 }
