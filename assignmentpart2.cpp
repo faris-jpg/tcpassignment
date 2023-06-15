@@ -33,36 +33,12 @@ void seperateWords(string str, vector<string> &commandWords)
 int findMode(string command)
 {
     // returns a number corresponding to the mode, to allow for switches instead of if else
-    vector<string> modeList = {"load",
-                               "store",
-                               "clone",
-                               "html",
-                               "min",
-                               "max",
-                               "median",
-                               "mean",
-                               "variance",
-                               "stdv",
-                               "add",
-                               "sub",
-                               "corr",
-                               "regression",
-                               "show",
-                               "titles",
-                               "report",
-                               "rows",
-                               "columns",
-                               "vhisto",
-                               "hhisto",
-                               "sort",
-                               "help",
-                               "oddrows",
-                               "evenrows",
-                               "primes",
-                               "man",
-                               "delete",
-                               "insert",
-                               "replace",
+    vector<string> modeList = {"load", "store", "clone", "html", "min", "max",
+                               "median", "mean", "variance", "stdv", "add",
+                               "sub", "corr", "regression", "show", "titles",
+                               "report", "rows", "columns", "vhisto", "hhisto",
+                               "sort", "help", "oddrows", "evenrows", "primes",
+                               "man", "delete", "insert", "replace",
                                "exit"};
 
     // check if command == any of the modes,
@@ -207,6 +183,32 @@ vector<int> sortColumn(vector<int> &column)
     return sortedColumn;
 }
 
+bool checkCSV(string argument){
+    for (int i = 0; i < argument.length(); i++)
+    {
+        // checks if a file was given
+        if (argument[i] == '.')
+        {
+            // checks if the file is a csv file
+            string extension = argument.substr(i, argument.length()); // gets the extension of the file
+            if (extension != ".csv")
+            {
+                // outputs error if not a csv file
+                system("Color 04");
+                cout << "\a";
+                cout << "invalid file type" << endl
+                    << "load <filename.csv>" << endl;
+                return false;
+            }
+            else
+            {
+                // if the file is a csv file, break out of the loop
+                return true;
+            }
+        }
+    }
+}
+
 struct myProgram
 {
     int numWords, numColumns, numRows, modeNumber;
@@ -344,33 +346,10 @@ struct myProgram
             return;
         }
         string argument = commandWords[1];
-        for (int i = 0; i < argument.length(); i++)
-        {
-            // checks if a file was given
-            if (argument[i] == '.')
-            {
-                // checks if the file is a csv file
-                string extension = argument.substr(i, argument.length()); // gets the extension of the file
-                if (extension != ".csv")
-                {
-                    // outputs error if not a csv file
-                    system("Color 04");
-                    cout << "\a";
-                    cout << "invalid file type" << endl
-                         << "load <filename.csv>" << endl;
-                    return;
-                }
-                else
-                {
-                    // if the file is a csv file, break out of the loop
-                    break;
-                }
-            }
-        }
+        if(checkCSV(commandWords[1])){
         ifstream inputFile(argument);
         if (!inputFile.is_open())
-        {
-            // if the file cannot be opened, output error message
+        { // if the file cannot be opened, output error message
             system("Color 04");
             cout << "\a";
             cout << "file cannot be opened" << endl;
@@ -413,6 +392,7 @@ struct myProgram
             system("Color 02");
             cout << argument << " has been loaded" << endl;
             inputFile.close(); // closes the file
+        }
         }
     }
     void show() {}
