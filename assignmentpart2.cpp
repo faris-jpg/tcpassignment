@@ -82,7 +82,16 @@ bool checkSyntax(vector<string> commandWords, int modeNumber, int numColumns)
         return (numWords == 3);
     case 14: // regression
         return (numWords == 2);
-    case 15: // show
+    default:
+        return false;
+    }
+}
+bool checkSyntax2(vector<string> commandWords, int modeNumber, int numColumns)
+{
+    int numWords = commandWords.size();
+    switch (modeNumber)
+    {
+        case 15: // show
         return (numWords == 1 || numWords == 2);
     case 16: // titles
     case 17: // report
@@ -101,19 +110,15 @@ bool checkSyntax(vector<string> commandWords, int modeNumber, int numColumns)
     case 26: // primes
         return (numWords == 2);
     case 27: // delete
-        if (commandWords[1] == "occurrence")
-            return (numWords == 4);
-        else if (commandWords[1] == "column" || commandWords[1] == "row")
-            return (numWords == 3);
-        else
-            return false;
+        if (commandWords[1] == "occurrence") return (numWords == 4);
+        else if (commandWords[1] == "column" || commandWords[1] == "row") return (numWords == 3);
+        else return false;
     case 28: // insert
         return (numWords == numColumns);
     case 29: // replace
         return (numWords == 3 || numWords == 4);
-    default:
-        return false;
     }
+    return false;
 }
 
 int checkColumn(string column, vector<string> columnNames)
@@ -257,12 +262,24 @@ struct Program
         seperateWords(command, commandWords);                              // seperates words by spaces and saves them in a vector
         numWords = commandWords.size();                                    // saves the number of words in the command
         modeNumber = findMode(commandWords[0]);                            // finds the mode number of the command
-        correctSyntax = checkSyntax(commandWords, modeNumber, numColumns); // checks if the syntax is correct
+        if(modeNumber < 16) correctSyntax = checkSyntax(commandWords, modeNumber, numColumns);
+        else correctSyntax = checkSyntax2(commandWords, modeNumber, numColumns);
     }
-
-    void runner()
-    {
-        // uses mode number to run the correct function
+    void runner(){
+        if (modeNumber == -1)
+        {
+            system("Color 04");
+            cout << "\a";
+            cout << "invalid command" << endl;
+            return;
+        }
+        else if (modeNumber <= 8) runner1();
+        else if (modeNumber <= 17) runner2();
+        else if (modeNumber <= 26) runner3();
+        else runner4();
+    }
+    void runner1()
+    {// uses mode number to run the correct function
         switch (modeNumber)
         {
         case 1: // load
@@ -289,6 +306,10 @@ struct Program
         case 8: // mean
             mean();
             break;
+        }
+    }
+    void runner2(){
+        switch(modeNumber){
         case 9: // variance
             variance();
             break;
@@ -316,6 +337,10 @@ struct Program
         case 17: // report
             report();
             break;
+        }
+    }
+    void runner3(){
+        switch(modeNumber){
         case 18: // rows
             rows();
             break;
@@ -343,6 +368,10 @@ struct Program
         case 26: // primes
             primes();
             break;
+        }
+    }
+    void runner4(){
+        switch(modeNumber){
         case 27:
             man();
             break;
@@ -358,11 +387,6 @@ struct Program
         case 31: // exit
 
             cout << "exiting..." << endl;
-            break;
-        case -1:
-            system("Color 04");
-            cout << "\a";
-            cout << "invalid command" << endl;
             break;
         }
     }
@@ -493,12 +517,12 @@ struct Program
     void findMedian()
     {
         float median;
-        vector<int> column, sortedColumn;
         if (!correctSyntax) errorPrinter("median <column> (optional)");
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
             {
+                vector<int> column, sortedColumn;
                 if (columnTypes[i] == "number")
                 {
                     for (int j = 0; j < numRows; j++)
@@ -522,6 +546,7 @@ struct Program
             }
             else
             {
+                vector<int> column, sortedColumn;
                 for (int j = 0; j < numRows; j++)
                 {
                     column.push_back(stoi(table[j][columnNumber]));
