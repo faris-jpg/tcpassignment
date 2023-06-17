@@ -246,6 +246,28 @@ void errorPrinter(string str){
     cout << "syntax error \n" << str << endl;
 }
 
+void dataLoader(ifstream &inputFile, int &numColumns, int &numRows, vector<string> &columnNames, vector<string> &columnTypes, vector<vector<string>> &table){
+    inputFile >> numColumns >> numRows; // gets the number of columns and rows
+    string row;
+    int rowCounter = -1;
+    while (getline(inputFile, row))
+    {
+        vector<string> rowVector;
+        stringstream rowStream(row);
+        string word;
+        while (getline(rowStream, word, ','))
+        { // seperates the words by commas
+            makeLower(word);
+            if (word[0] == ' ') word = word.substr(1, word.length()); // removes the space at the beginning of the word                    
+            if (rowCounter == 0) columnNames.push_back(word);// if it is the first row, save the column names
+            else if (rowCounter == 1) columnTypes.push_back(word); // if it is the second row, save the column types
+            else rowVector.push_back(word); // if it is any other row, save the data
+        }
+        if (rowCounter > 1) table.push_back(rowVector); 
+        rowCounter++;
+    }
+}
+
 struct Program
 {
     int numWords, numColumns, numRows, modeNumber;
@@ -392,63 +414,21 @@ struct Program
     }
     void load()
     {
-        if (!correctSyntax)
-        {
-            // if the syntax is incorrect, output error message
-            system("Color 04");
-            cout << "\a";
-            cout << "syntax error" << endl
-                 << "load <filename.csv>" << endl;
-            return;
-        }
-        string argument = commandWords[1];
+        if (!correctSyntax) errorPrinter("load <filename.csv>");
         if(checkCSV(commandWords[1])){
-        ifstream inputFile(argument);
-        if (!inputFile.is_open())
-        { // if the file cannot be opened, output error message
-            system("Color 04");
-            cout << "\a";
-            cout << "file cannot be opened" << endl;
-            return;
-        }
-        else
-        {
-            inputFile >> numColumns >> numRows; // gets the number of columns and rows
-            string row;
-            int rowCounter = -1;
-            while (getline(inputFile, row))
-            {
-                vector<string> rowVector;
-                stringstream rowStream(row);
-                string word;
-                while (getline(rowStream, word, ','))
-                { // seperates the words by commas
-                    if (word[0] == ' ')
-                        word = word.substr(1, word.length()); // removes the space at the beginning of the word
-                    makeLower(word);
-                    if (rowCounter == 0)
-                    { // if it is the first row, save the column names
-                        columnNames.push_back(word);
-                    }
-                    else if (rowCounter == 1)
-                    { // if it is the second row, save the column types
-                        columnTypes.push_back(word);
-                    }
-                    else
-                    { // if it is any other row, save the data
-                        rowVector.push_back(word);
-                    }
-                }
-                if (rowCounter > 1)
-                { // if it is any other row, save the data
-                    table.push_back(rowVector);
-                }
-                rowCounter++;
+            ifstream inputFile(commandWords[1]);
+            if (!inputFile.is_open())
+            { // if the file cannot be opened, output error message
+                system("Color 04");
+                cout << "\a" << "file cannot be opened" << endl;
             }
-            system("Color 02");
-            cout << argument << " has been loaded" << endl;
-            inputFile.close(); // closes the file
-        }
+            else
+            {
+                dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
+                system("Color 02");
+                cout << commandWords[1] << " has been loaded" << endl;
+                inputFile.close(); // closes the file
+            }
         }
     }
     void show() {}
