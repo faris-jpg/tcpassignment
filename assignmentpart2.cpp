@@ -243,7 +243,7 @@ bool checkCSV(string argument){
 void errorPrinter(string str){
     system("Color 04");
     cout << "\a";
-    cout << "syntax error \n" << str << endl;
+    cout << str << endl;
 }
 
 void dataLoader(ifstream &inputFile, int &numColumns, int &numRows, vector<string> &columnNames, vector<string> &columnTypes, vector<vector<string>> &table){
@@ -268,6 +268,18 @@ void dataLoader(ifstream &inputFile, int &numColumns, int &numRows, vector<strin
     }
 }
 
+float findMedian(vector<vector<string>> table, int columnNumber, int numRows)
+{
+    vector<int> column, sortedColumn;
+    for (int j = 0; j < numRows; j++)
+    {
+        column.push_back(stoi(table[j][columnNumber]));
+    }
+    sortedColumn = sortColumn(column);
+    if (numRows%2) return sortedColumn[numRows/2];
+    else return (float)(sortedColumn[numRows/2] + sortedColumn[numRows/2 - 1])/2;
+}
+
 struct Program
 {
     int numWords, numColumns, numRows, modeNumber;
@@ -289,12 +301,7 @@ struct Program
     }
     void runner(){
         if (modeNumber == -1)
-        {
-            system("Color 04");
-            cout << "\a";
-            cout << "invalid command" << endl;
-            return;
-        }
+            errorPrinter("invalid command");
         else if (modeNumber <= 8) runner1();
         else if (modeNumber <= 17) runner2();
         else if (modeNumber <= 26) runner3();
@@ -323,7 +330,7 @@ struct Program
             max();
             break;
         case 7: // median
-            findMedian();
+            median();
             break;
         case 8: // mean
             mean();
@@ -414,14 +421,10 @@ struct Program
     }
     void load()
     {
-        if (!correctSyntax) errorPrinter("load <filename.csv>");
+        if (!correctSyntax) errorPrinter("syntax error\nload <filename.csv>");
         if(checkCSV(commandWords[1])){
             ifstream inputFile(commandWords[1]);
-            if (!inputFile.is_open())
-            { // if the file cannot be opened, output error message
-                system("Color 04");
-                cout << "\a" << "file cannot be opened" << endl;
-            }
+            if (!inputFile.is_open()) errorPrinter("file does not exist");
             else
             {
                 dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
@@ -437,7 +440,7 @@ struct Program
     void html() {}
     void min()
     {
-        if (!correctSyntax) errorPrinter("min <column> (optional)");
+        if (!correctSyntax) errorPrinter("syntax error\nmin <column> (optional)");
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
@@ -453,10 +456,7 @@ struct Program
         { 
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number")
-            { // checks if the column exists
-                system("Color 04");
-                cout << '\a' << "column does not exist and must be of type number" << endl;
-            }
+                errorPrinter("column must exist and must be of type number");
             else
             {                
                 system("Color 02");
@@ -466,7 +466,7 @@ struct Program
     }
     void max()
     {
-        if (!correctSyntax) errorPrinter("max <column> (optional)");
+        if (!correctSyntax) errorPrinter("syntax error\nmax <column> (optional)");
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
@@ -482,10 +482,7 @@ struct Program
         { 
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number")
-            { // checks if the column exists
-                system("Color 04");
-                cout << '\a' << "column does not exist and must be of type number" << endl;
-            }
+                errorPrinter("column does not exist and must be of type number");
             else
             {                
                 system("Color 02");
@@ -494,62 +491,35 @@ struct Program
         }
 
     }
-    void findMedian()
+    void median()
     {
-        float median;
-        if (!correctSyntax) errorPrinter("median <column> (optional)");
+        if (!correctSyntax) errorPrinter("syntax error\nmedian <column> (optional)");
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
             {
                 vector<int> column, sortedColumn;
                 if (columnTypes[i] == "number")
-                {
-                    for (int j = 0; j < numRows; j++)
-                    {
-                        column.push_back(stoi(table[j][i]));
-                    }
-                    sortedColumn = sortColumn(column);
-                    if (numRows%2) median = sortedColumn[numRows/2];
-                    else median = (float)(sortedColumn[numRows/2] + sortedColumn[numRows/2 - 1])/2;
-                    cout << "median of column " << columnNames[i] << " is " << median << endl;
-                }
+                    cout << "median of column " << columnNames[i] << " is " 
+                         << findMedian(table, i, numRows) << endl;
             }
         }
         else
         {
             int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1 || columnTypes[columnNumber] != "number")
-            {
-                system("Color 04");
-                cout << '\a' << "column must exist and be of type number" << endl;
-            }
+            if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
             else
             {
-                vector<int> column, sortedColumn;
-                for (int j = 0; j < numRows; j++)
-                {
-                    column.push_back(stoi(table[j][columnNumber]));
-                }
-                sortedColumn = sortColumn(column);
-                if (numRows%2) median = sortedColumn[numRows/2];
-                    else median = (float)(sortedColumn[numRows/2] + sortedColumn[numRows/2 - 1])/2;
-                    cout << "median of column " << columnNames[columnNumber] << " is " << median << endl;
-                }
+                cout << "median of column " << columnNames[columnNumber] << " is " 
+                     << findMedian(table, columnNumber, numRows) << endl;
+            }
         }
     }
     void mean()
     {
         cout << setprecision(4) << fixed;
-        if (!correctSyntax)
-        {
-            system("Color 04");
-            cout << "\a";
-            cout << "syntax error" << endl
-                 << "mean <column> (optional)" << endl;
-            return;
-        }
-        if (numWords == 1)
+        if (!correctSyntax) errorPrinter("syntax error\nmean <column> (optional)");
+        else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
             {
@@ -564,20 +534,8 @@ struct Program
         else
         {
             int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1)
-            {
-                system("Color 04");
-                cout << "\a";
-                cout << "column does not exist" << endl;
-                return;
-            }
-            else if (columnTypes[columnNumber] != "number")
-            {
-                system("Color 04");
-                cout << "\a";
-                cout << "column is not of type number" << endl;
-                return;
-            }
+            if (columnNumber == -1 || columnTypes[columnNumber] != "number") 
+            errorPrinter("column must exist and be of type number");
             else
             {
                 system("Color 02");
@@ -588,7 +546,7 @@ struct Program
     }
     void variance()
     {
-        if(!correctSyntax) errorPrinter("variance <column> (optional)");
+        if(!correctSyntax) errorPrinter("syntax error\nvariance <column> (optional)");
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
@@ -604,10 +562,7 @@ struct Program
         {
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1|| columnTypes[columnNumber] != "number")
-            {
-                system("Color 04");
-                cout << '\a' << "column must exist and be of type number" << endl;
-            }
+                errorPrinter("column must exist and be of type number");
             else
             {
                 system("Color 02");
@@ -617,7 +572,7 @@ struct Program
     }
     void stdv()
     {
-        if (!correctSyntax) errorPrinter("stdv <column> (optional)");
+        if (!correctSyntax) errorPrinter("syntax error\nstdv <column> (optional)");
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
@@ -632,12 +587,8 @@ struct Program
         else
         {
             int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1 || columnTypes[columnNumber] != "number")
-            {
-                system("Color 04");
-                cout << "\a";
-                cout << "column must exist and be of type number" << endl;
-            }
+            if (columnNumber == -1 || columnTypes[columnNumber] != "number") 
+                errorPrinter("column must exist and be of type number");
             else
             {
                 system("Color 02");
@@ -649,16 +600,12 @@ struct Program
     {
         if (!correctSyntax) 
         {
-        errorPrinter("sum <column1> <column2>"); 
+        errorPrinter("syntax error\nsum <column1> <column2>"); 
         return;
         }    
         int columnNumber1 = checkColumn(commandWords[1], columnNames),  columnNumber2 = checkColumn(commandWords[2], columnNames);
         if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
-        {
-            system("Color 04");
-            cout << "\a";
-            cout << "both columns must exist and be of type number" << endl;
-        }
+            errorPrinter("both columns must exist and be of type number");
         else
         {
             system("Color 02");
@@ -683,10 +630,7 @@ struct Program
         int columnNumber1 = checkColumn(commandWords[1], columnNames);
         int columnNumber2 = checkColumn(commandWords[2], columnNames);
         if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
-        {
-            system("Color 04");
-            cout << '\a' << "both columns must exist and be of type number" << endl;
-        }
+            errorPrinter("both columns must exist and be of type number");
         else
         {
             system("Color 02");
