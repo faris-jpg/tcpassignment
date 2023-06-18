@@ -422,7 +422,7 @@ struct Program
     void load()
     {
         if (!correctSyntax) errorPrinter("syntax error\nload <filename.csv>");
-        if(checkCSV(commandWords[1])){
+        else if(checkCSV(commandWords[1])){
             ifstream inputFile(commandWords[1]);
             if (!inputFile.is_open()) errorPrinter("file does not exist");
             else
