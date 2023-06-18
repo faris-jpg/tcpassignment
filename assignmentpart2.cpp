@@ -652,6 +652,10 @@ struct Program
         }
         int columnNumber1 = checkColumn(commandWords[1], columnNames);
         int columnNumber2 = checkColumn(commandWords[2], columnNames);
+        if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+            errorPrinter("both columns must exist and be of type number");
+        else
+        {
         float mean1 = findMean(table, columnNumber1);
         float mean2 = findMean(table, columnNumber2);
         float numerator = 0, denominator1 = 0, denominator2 = 0, denominator = 0;
@@ -666,6 +670,7 @@ struct Program
         cout << "correlation between columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
              << " is " << numerator / denominator << endl;
 
+        }
     }
     void regression() 
     { 
@@ -676,19 +681,24 @@ struct Program
         }
         int columnNumber1 = checkColumn(commandWords[1], columnNames);
         int columnNumber2 = checkColumn(commandWords[2], columnNames);
-        float mean1 = findMean(table, columnNumber1);
-        float mean2 = findMean(table, columnNumber2);
-        float numerator = 0, denominator = 0;
-        for (int i = 0; i < numRows; i++)
+        if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+            errorPrinter("both columns must exist and be of type number");
+        else
         {
-            numerator += (stoi(table[i][columnNumber1]) - mean1) * (stoi(table[i][columnNumber2]) - mean2);
-            denominator += pow(stoi(table[i][columnNumber1]) - mean1, 2);
+            float sumX = 0, sumX2 = 0, sumY = 0, sumXY = 0;
+            for (int i = 0; i < numRows; i++)
+            {
+                sumX += stoi(table[i][columnNumber1]);
+                sumX2 += pow(stoi(table[i][columnNumber1]), 2);
+                sumY += stoi(table[i][columnNumber2]);  
+                sumXY += stoi(table[i][columnNumber1]) * stoi(table[i][columnNumber2]);
+            }
+            float b1 = (numRows * sumXY - sumX * sumY) / (numRows * sumX2 - pow(sumX, 2));
+            float b0 = (sumY - b1 * sumX) / numRows;
+            system("Color 02");
+            cout << "regression line for columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+                << " is " << b0 << " + " << b1 << "x" << endl;
         }
-        float b1 = numerator / denominator;
-        float b0 = mean2 - b1 * mean1;
-        system("Color 02");
-        cout << "regression line for columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
-             << " is " << b0 << " + " << b1 << "x" << endl;
     }
     void titles() {}
     void report() {}
