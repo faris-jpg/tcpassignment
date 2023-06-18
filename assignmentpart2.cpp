@@ -90,8 +90,8 @@ bool checkSyntax2(vector<string> commandWords, int modeNumber, int numColumns)
     int numWords = commandWords.size();
     switch (modeNumber)
     {
-        case 15: // show
-        return (numWords == 1 || numWords == 2);
+    case 15: // show
+    return (numWords == 1 || numWords == 2);
     case 16: // titles
     case 17: // report
     case 18: // rows
@@ -295,7 +295,7 @@ struct Program
         seperateWords(command, commandWords);                              // seperates words by spaces and saves them in a vector
         numWords = commandWords.size();                                    // saves the number of words in the command
         modeNumber = findMode(commandWords[0]);                            // finds the mode number of the command
-        if(modeNumber < 16) correctSyntax = checkSyntax(commandWords, modeNumber, numColumns);
+        if(modeNumber < 15) correctSyntax = checkSyntax(commandWords, modeNumber, numColumns);
         else correctSyntax = checkSyntax2(commandWords, modeNumber, numColumns);
     }
     void runner(){
@@ -433,7 +433,34 @@ struct Program
             }
         }
     }
-    void show() {}
+    void show() {
+        if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+        else if (numWords == 1)
+        {
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numColumns; j++)
+                {
+                    system("Color 02");
+                    cout << table[i][j] << " ";
+                }
+                cout << endl;
+            }
+        }
+        else
+        {
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1) errorPrinter("column does not exist");
+            else
+            {
+                for (int i = 0; i < numRows; i++)
+                {
+                    system("Color 02");
+                    cout << table[i][columnNumber] << endl;
+                }
+            }
+        }
+    }
     void store() {}
     void clone() {}
     void html() {}
