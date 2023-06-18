@@ -79,9 +79,8 @@ bool checkSyntax(vector<string> commandWords, int modeNumber, int numColumns)
     case 11: // sum
     case 12: // diff
     case 13: // corr
-        return (numWords == 3);
     case 14: // regression
-        return (numWords == 2);
+        return (numWords == 3);
     default:
         return false;
     }
@@ -669,8 +668,27 @@ struct Program
 
     }
     void regression() 
-    {
-
+    { 
+        if(!correctSyntax)
+        {
+            errorPrinter("syntax error\nregression <column1> <column2>");
+            return;
+        }
+        int columnNumber1 = checkColumn(commandWords[1], columnNames);
+        int columnNumber2 = checkColumn(commandWords[2], columnNames);
+        float mean1 = findMean(table, columnNumber1);
+        float mean2 = findMean(table, columnNumber2);
+        float numerator = 0, denominator = 0;
+        for (int i = 0; i < numRows; i++)
+        {
+            numerator += (stoi(table[i][columnNumber1]) - mean1) * (stoi(table[i][columnNumber2]) - mean2);
+            denominator += pow(stoi(table[i][columnNumber1]) - mean1, 2);
+        }
+        float b1 = numerator / denominator;
+        float b0 = mean2 - b1 * mean1;
+        system("Color 02");
+        cout << "regression line for columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+             << " is " << b0 << " + " << b1 << "x" << endl;
     }
     void titles() {}
     void report() {}
