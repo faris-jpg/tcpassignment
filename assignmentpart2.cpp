@@ -727,18 +727,87 @@ struct Program
                 << " is " << b0 << " + " << b1 << "x" << endl;
         }
     }
-    void titles() {}
+    // TITLES
+    void titles() {
+    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    else if (numWords == 1)
+        {
+            cout << "The titles in the files are: ";
+            for (int i = 0; i < columnNames.size(); ++i)
+    {
+        cout << columnNames[i];
+        if (i != columnNames.size() - 1)
+            cout << " , ";
+    }
+        }
+        cout << endl;
+    }
+    //REPORT
     void report() {}
-    void rows() {}
-    void columns() {}
+    //ROWS
+    void rows() {
+    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    else if (numWords == 1)
+        {   
+            cout << numRows << endl;
+        }
+    }
+    //COLUMNS
+    void columns() {
+    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    else if (numWords == 1)
+        {   
+            cout << numColumns << endl;
+        }
+    }
+    //VHISTO
     void vhisto() {}
+    //HHISTO
     void hhisto() {}
+    //SORT
     void sort() {}
+    //HELP
     void help() {}
-    void oddrows() {}
-    void evenrows() {}
+    //ODDROWS
+    void oddrows() {
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: oddrows");
+    else if (numWords == 1)
+    for (int i = 0; i < numRows; i++)
+        {
+            if ((i-1) % 2 != 0){
+            cout << "This is row " << (i+1) << ", The content is: ";
+            for (int j = 0; j < numColumns; j++)
+                {
+                system("Color 02");
+                cout << table[i][j] << " ";
+                }
+            cout << endl;
+            }
+        }
+    }
+    //EVENROWS
+    void evenrows() {
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: evenrows");
+    else if (numWords == 1)
+    for (int i = 0; i < numRows; i++)
+        {
+            if ((i-1) % 2 == 0){
+            cout << "This is row " << (i+1) << ", The content is: ";
+            for (int j = 0; j < numColumns; j++)
+                {
+                system("Color 02");
+                cout << table[i][j] << " ";
+                }
+            cout << endl;
+            }
+        }
+    }
+    //PRIMES
     void primes() {}
+    //MAN
     void man() {}
+
+    
     void delete_() {}
     void insert() {}
     void replace() {}
