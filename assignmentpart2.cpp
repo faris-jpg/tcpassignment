@@ -767,7 +767,13 @@ struct Program
     //SORT
     void sort() {}
     //HELP
-    void help() {}
+    void help() {
+        system("Color 01");
+        cout << "Command available:- \n-load \n-store \n-clone \n-html \n-min \n-max \n-median"
+             << "\n-mean \n-variance \n-stdv \n-add \n-sub \n-corr \n-regression \n-show \n-titles \n-report" 
+             << "\n-rows \n-columns \n-vhisto \n-hhisto \n-sort \n-oddrows \n-evenrows \n-primes \n-man \n-delete" 
+             << "\n-insert \n-replace \n-exit \n<For more info about command,key in 'man (command)'>"<< endl;
+    }
     //ODDROWS
     void oddrows() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: oddrows");
@@ -816,14 +822,14 @@ void interpreterActivate()
 {
     system("cls");
     system("Color 01");
-    cout << "program activated.\n";
+    cout << "Program activated. Key in 'help' to check available command.\n";
 }
 
 void interpreterTerminate()
 {
     system("Color 01");
     cout << "\a";
-    cout << "program terminated.";
+    cout << "Program terminated.";
 }
 int main()
 {
