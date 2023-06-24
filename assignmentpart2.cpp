@@ -727,6 +727,7 @@ struct Program
                 << " is " << b0 << " + " << b1 << "x" << endl;
         }
     }
+
     // TITLES
     void titles() {
     if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
@@ -742,30 +743,35 @@ struct Program
         }
         cout << endl;
     }
+
     //REPORT
     void report() {}
+
     //ROWS
     void rows() {
     if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
     else if (numWords == 1)
         {   
             cout << numRows << endl;
-        }
-    }
+        }}
+
     //COLUMNS
     void columns() {
     if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
     else if (numWords == 1)
         {   
             cout << numColumns << endl;
-        }
-    }
+        }}
+
     //VHISTO
     void vhisto() {}
+
     //HHISTO
     void hhisto() {}
+
     //SORT
     void sort() {}
+
     //HELP
     void help() {
         system("Color 01");
@@ -774,6 +780,7 @@ struct Program
              << "\n-rows \n-columns \n-vhisto \n-hhisto \n-sort \n-oddrows \n-evenrows \n-primes \n-man \n-delete" 
              << "\n-insert \n-replace \n-exit \n<For more info about command,key in 'man (command)'>"<< endl;
     }
+
     //ODDROWS
     void oddrows() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: oddrows");
@@ -787,10 +794,8 @@ struct Program
                 system("Color 02");
                 cout << table[i][j] << " ";
                 }
-            cout << endl;
-            }
-        }
-    }
+            cout << endl;}}}
+
     //EVENROWS
     void evenrows() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: evenrows");
@@ -804,12 +809,31 @@ struct Program
                 system("Color 02");
                 cout << table[i][j] << " ";
                 }
-            cout << endl;
-            }
+            cout << endl;}}}
+
+    //PRIMEIDENTIFIER
+    bool PrimeTester(int x) {
+    if (x <= 1) // 0 is not a prime number
+        return false;
+    for (int i = 2; i <= sqrt(x); ++i) {
+        if (x % i == 0)
+            return false;
         }
-    }
+    return true;}
+    
     //PRIMES
-    void primes() {}
+    void primes() {
+    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    else if (numWords == 2){
+        int columnNumber = checkColumn(commandWords[1], columnNames);
+        if (columnNumber == -1) errorPrinter("column does not exist");
+        else{
+            for (int i = 0; i < numRows; i++){
+                system("Color 02");
+                int x = stoi(table[i][columnNumber]);
+                if (PrimeTester(x)) {
+                    cout << x << endl;}}}}}
+
     //MAN
     void man() {}
 
