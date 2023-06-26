@@ -730,7 +730,7 @@ struct Program
 
     // TITLES
     void titles() {
-    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: titles");
     else if (numWords == 1)
         {
             cout << "The titles in the files are: ";
@@ -746,7 +746,7 @@ struct Program
 
     //REPORT
     void report() {
-    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: report");
     else if (numWords == 1){
         cout << "MINIMUM:-\n" << endl; min(); 
         cout << "\nMAXIMUM:-\n"; max(); 
@@ -759,7 +759,7 @@ struct Program
 
     //ROWS
     void rows() {
-    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: rows");
     else if (numWords == 1)
         {   
             cout << numRows << endl;
@@ -767,7 +767,7 @@ struct Program
 
     //COLUMNS
     void columns() {
-    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: columns");
     else if (numWords == 1)
         {   
             cout << numColumns << endl;
@@ -780,7 +780,20 @@ struct Program
     void hhisto() {}
 
     //SORT
-    void sort() {}
+    void sort() {
+        if (!correctSyntax) errorPrinter("syntax error\nCommand: sort <column>");
+        else if (numWords == 2){
+        int columnNumber = checkColumn(commandWords[1], columnNames);
+        if (columnNumber == -1) errorPrinter("column does not exist");
+        else{
+                cout << "Successfully sort data according to " << commandWords[1] << " from ascending order\nType 'show' to see the result" << endl;
+                for (int i = 0; i < numRows; i++){
+                    for (int j = 0; j < numRows - i - 1; ++j) {
+                        if (table[j][columnNumber] > table[j + 1][columnNumber]) {
+                        swap(table[j], table[j + 1]);}}}
+            }
+        }
+    }
 
     //HELP
     void help() {
@@ -833,7 +846,7 @@ struct Program
     
     //PRIMES
     void primes() {
-    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: primes <column>");
     else if (numWords == 2){
         int columnNumber = checkColumn(commandWords[1], columnNames);
         if (columnNumber == -1) errorPrinter("column does not exist");
