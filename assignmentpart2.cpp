@@ -461,7 +461,30 @@ struct Program
             }
         }
     }
-    void store() {}
+    //STORE
+    void store() {
+        if (!correctSyntax) errorPrinter("syntax error\nstore <filename.csv>");
+        else if(checkCSV(commandWords[1])){
+            ofstream inputFile(commandWords[1]);
+            if (!inputFile.is_open()) errorPrinter("file does not exist");
+            else{
+                system("Color 02");
+                inputFile << numColumns << endl << numRows << endl;
+                for (const string& columnName : columnNames) {
+                    inputFile << columnName << ' ';}
+                inputFile << endl;
+                for (const string& columnType : columnTypes) {
+                    inputFile << columnType << ' ';}
+                inputFile << endl;
+                for (int i = 0; i < numRows; i++){
+                    for (int j = 0; j < numColumns; j++){
+                        system("Color 02");
+                        inputFile << table[i][j] << " ";}
+                inputFile << endl;}
+                inputFile.close(); // closes the file
+                cout << "File successfully stored, the name of the file is " << commandWords[1] << endl;}
+        }
+    }
 
     //CLONE
     void clone() {
