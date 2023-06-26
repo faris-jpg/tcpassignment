@@ -462,7 +462,22 @@ struct Program
         }
     }
     void store() {}
-    void clone() {}
+
+    //CLONE
+    void clone() {
+        if (!correctSyntax) errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");
+        else if(checkCSV(commandWords[1]) && checkCSV(commandWords[2])){
+            ifstream inputFile(commandWords[1]);
+            if (!inputFile.is_open()) errorPrinter("file does not exist");
+            else{
+                system("Color 02");
+                string cloneFileName = commandWords[2];
+                ofstream Cloned(cloneFileName);
+                string line;
+                while (getline(inputFile, line)) {Cloned << line << endl;}
+                cout << "File successfully cloned, the clone file is named: " << commandWords[2] << endl;}}
+        else  errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");}
+
     void html() {}
     void min()
     {
