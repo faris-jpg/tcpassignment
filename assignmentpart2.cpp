@@ -745,7 +745,17 @@ struct Program
     }
 
     //REPORT
-    void report() {}
+    void report() {
+    if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+    else if (numWords == 1){
+        cout << "MINIMUM:-\n" << endl; min(); 
+        cout << "\nMAXIMUM:-\n"; max(); 
+        cout << "\nMEDIAN:-\n"; median();  
+        cout << "\nMEAN:-\n"; mean();
+        cout <<"\nVARIANCE:-\n"; variance(); 
+        cout <<"\nSTANDARD DEVIATION:-\n"; stdv();}
+    }
+
 
     //ROWS
     void rows() {
