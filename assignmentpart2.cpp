@@ -911,53 +911,57 @@ struct Program
                     cout << x << endl;}}}}}
 
     //MAN
-    //MAN
-    void man() {
+    void man() { system("Color 02");
         if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
         else if (numWords == 2){
-        if (findMode(commandWords[1]) == 1){cout << "Command: load <csv file>\nReads the file named filename and "
+        int x = findMode(commandWords[1]);
+        if ( x == 1){cout << "Command: load <csv file>\nReads the file named filename and "
         << "parses its contents and stores it into arrays or vectors."<< endl;}
-        else if (findMode(commandWords[1]) == 2){cout <<"Command: store <csv file>\nSave the active array or vectors into "
+        else if ( x== 2){cout <<"Command: store <csv file>\nSave the active array or vectors into "
         << "a csv formatted file with the name filename"<< endl;}
-        else if (findMode(commandWords[1]) == 3){cout <<"Command: clone <csv file> <csv file>\nCreate a copy of file1 and name it file2." << endl;}
-        else if (findMode(commandWords[1]) == 4){cout <<"Command: html <html file> Or html <csv file> <html file>\nGenerates an HTML document for the loaded data and "
+        else if ( x == 3){cout <<"Command: clone <csv file> <csv file>\nCreate a copy of file1 and name it file2." << endl;}
+        else if ( x == 4){cout <<"Command: html <html file> Or html <csv file> <html file>\nGenerates an HTML document for the loaded data and "
         << " store it in the specific file.\n-Or-\nRead the a.csv file and convert it to an html table with proper column titles and format."  <<endl;}
-        else if (findMode(commandWords[1]) == 5){cout <<"Command: min Or min <column name>\nShows the minimum of all the columns.\n-Or-\nDisplay the minimum of the "
+        else if ( x == 5){cout <<"Command: min Or min <column name>\nShows the minimum of all the columns.\n-Or-\nDisplay the minimum of the "
         << "specific column." << endl;}
-        else if (findMode(commandWords[1]) == 6){cout <<"Command: max Or max <column name>\nShows the maximum of all the columns.\n-Or-\nDisplay the maximum of the "
+        else if ( x == 6){cout <<"Command: max Or max <column name>\nShows the maximum of all the columns.\n-Or-\nDisplay the maximum of the "
         << "specific column." << endl;}
-        else if (findMode(commandWords[1]) == 7){cout <<"Command: median Or median <column name>\nShows the median of all the columns.\n-Or-\nDisplay the median of the "
+        else if ( x == 7){cout <<"Command: median Or median <column name>\nShows the median of all the columns.\n-Or-\nDisplay the median of the "
         << "specific column." << endl;}
-        else if (findMode(commandWords[1]) == 8){cout <<"Command: mean Or mean <column name>\nShows the mean of all the columns.\n-Or-\nDisplay the mean of the "
+        else if ( x == 8){cout <<"Command: mean Or mean <column name>\nShows the mean of all the columns.\n-Or-\nDisplay the mean of the "
         << "specific column." << endl;}
-        else if (findMode(commandWords[1]) == 9){cout <<"Command: variance Or variance <column name>\nShows the variance of all the columns.\n-Or-\nDisplay the "
+        else if ( x == 9){cout <<"Command: variance Or variance <column name>\nShows the variance of all the columns.\n-Or-\nDisplay the "
         << "variance of the specific column." << endl;}
-        else if (findMode(commandWords[1]) == 10){cout <<"Command: stdv Or stdv <column name>\nShows the standard division of all the columns.\n-Or-\nDisplay "
+        else if ( x == 10){cout <<"Command: stdv Or stdv <column name>\nShows the standard division of all the columns.\n-Or-\nDisplay "
         << "the standard division of the specific column." << endl;}
-        else if (findMode(commandWords[1]) == 11){cout <<"Command: add <column name 1> <column name 2>\nDisplays a column resulted from adding the "
+        else if ( x == 11){cout <<"Command: add <column name 1> <column name 2>\nDisplays a column resulted from adding the "
         << "column name 1 and column name 2." << endl;}
-        else if (findMode(commandWords[1]) == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
+        else if ( x == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
         << "column name 1 and column name 2." << endl;}
-        else if (findMode(commandWords[1]) == 13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
+        else if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
         << "column name 1 and the column name 2 using Pearson correlation." << endl;}
-        else if (findMode(commandWords[1]) == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
-        << "a selected column." << endl;} else if (findMode(commandWords[1])>= 15 || findMode(commandWords[1]) == -1) {man2();}}}   
+        else if (findMode(commandWords[1])>= 14 || findMode(commandWords[1]) == -1) {man2(x);}}}
 
-    void man2(){ 
-        if (findMode(commandWords[1]) == 15) cout << "Command: show or show <column>\n Displays data from file or column\n";
-        else if (findMode(commandWords[1]) == 16) cout << " "; //show
-        else if (findMode(commandWords[1]) == 17) cout << "Command: titles\nDisplays titles of all columns\n"; //titles
-        else if (findMode(commandWords[1]) == 18) cout << "Command: report\nDisplays a report that shows all statistics for all columns\n"; //report
-        else if (findMode(commandWords[1]) == 19) cout << "Command: rows\nDisplay number of rows loaded.\n"; //rows 
-        else if (findMode(commandWords[1]) == 20) cout << "Command: columns\nDisplay number of columns loaded.\n"; //columns
-        else if (findMode(commandWords[1]) == 21) cout << "Command: vhisto <column>\nDisplays vertical histogram for the column.\n"; //vhisto
-        else if (findMode(commandWords[1]) == 22) cout << "Command: hhisto <column>\nDisplays horizontal histogram for the column.\n"; //hhisto
-        else if (findMode(commandWords[1]) == 23) cout << "Command: sort <column>\nSorts data in ascending order according to the column value\n"; //sort 
-        else if (findMode(commandWords[1]) == 24) cout << "Command: oddrows\nDisplay odd rows from table\n"; //oddrows
-        else if (findMode(commandWords[1]) == 25) cout << "Command: evenrows\nDisplay even rows from table\n"; // evenrows
-        else if (findMode(commandWords[1]) == 26) cout << "Command: primes <column>\nShows prime numbers in the column.\n"; //primes
-        else errorPrinter("syntax error\nCommand: man <command>");
-    }
+    void man2(int x){ system("Color 02");
+        if ( x == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
+        << "a selected column." << endl;}
+        else if( x == 15) cout << "Command: show or show <column>\n Displays data from file or column\n";
+        else if ( x == 16) cout << "Command: titles\nDisplays titles of all columns\n"; //titles
+        else if ( x == 17) cout << "Command: report\nDisplays a report that shows all statistics for all columns\n"; //report
+        else if ( x == 18) cout << "Command: rows\nDisplay number of rows loaded.\n"; //rows 
+        else if ( x == 19) cout << "Command: columns\nDisplay number of columns loaded.\n"; //columns
+        else if ( x == 20) cout << "Command: vhisto <column>\nDisplays vertical histogram for the column.\n"; //vhisto
+        else if ( x == 21) cout << "Command: hhisto <column>\nDisplays horizontal histogram for the column.\n"; //hhisto
+        else if ( x == 22) cout << "Command: sort <column>\nSorts data in ascending order according to the column value\n"; //sort 
+        else if ( x == 24) cout << "Command: oddrows\nDisplay odd rows from table\n"; //oddrows
+        else if ( x == 25) cout << "Command: evenrows\nDisplay even rows from table\n"; // evenrows
+        else if ( x == 26) cout << "Command: primes <column>\nShows prime numbers in the column.\n"; //primes
+        else if ( x == 28) cout << "Command: delete occurance <column name> <integer> Or delete row <integer> Or delete column <column name> "
+        << " \nDelete the row that contain the specific number in the specific column.\n-Or-\nDelete the specific row\n-Or-\nDelete the specific column.\n"; //delete
+        else if ( x == 29) cout << "Command: insert row <data according to the column catergories.>\nAdd a new row of data.\n"; //insert
+        else if ( x == 30) cout << "Command: replace <integer> <integer> Or replace <column name> <integer> <integer>\nReplace the specific value with the new specific value."
+        << "\n-Or-\nReplace the specific value with the new specific value in the specific column"; //replace
+        else errorPrinter("syntax error\nCommand: man <command>");}
     
     void delete_() {}
     void insert() {}
