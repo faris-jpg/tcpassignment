@@ -1011,7 +1011,8 @@ struct Program
     }   
 
     //MAN
-    void man() { system("Color 02");
+    void man() { 
+        system("Color 02");
         if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
         else if (numWords == 2){
         int x = findMode(commandWords[1]);
@@ -1038,12 +1039,15 @@ struct Program
         << "column name 1 and column name 2." << endl;}
         else if ( x == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
         << "column name 1 and column name 2." << endl;}
-        else if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
-        << "column name 1 and the column name 2 using Pearson correlation." << endl;}
-        else if (findMode(commandWords[1])>= 14 || findMode(commandWords[1]) == -1) {man2(x);}}}
+        else if (findMode(commandWords[1])>= 13 || findMode(commandWords[1]) == -1) {man2(x);}
+            }
+        }
 
-    void man2(int x){ system("Color 02");
-        if ( x == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
+        void man2(int x){ 
+        system("Color 02");
+        if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
+        << "column name 1 and the column name 2 using Pearson correlation." << endl;}
+        else if ( x == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
         << "a selected column." << endl;}
         else if( x == 15) cout << "Command: show or show <column>\n Displays data from file or column\n";
         else if ( x == 16) cout << "Command: titles\nDisplays titles of all columns\n"; //titles
@@ -1061,7 +1065,9 @@ struct Program
         else if ( x == 29) cout << "Command: insert row <data according to the column catergories.>\nAdd a new row of data.\n"; //insert
         else if ( x == 30) cout << "Command: replace <integer> <integer> Or replace <column name> <integer> <integer>\nReplace the specific value with the new specific value."
         << "\n-Or-\nReplace the specific value with the new specific value in the specific column"; //replace
-        else errorPrinter("syntax error\nCommand: man <command>");}
+        else errorPrinter("syntax error\nCommand: man <command>");
+        }
+    
     
     void delete_() {}
     void insert() {}
