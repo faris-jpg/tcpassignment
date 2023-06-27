@@ -253,6 +253,32 @@ bool checkCSV(string argument){
     return false;
 }
 
+bool checkHTML(string argument){
+    for (int i = 0; i < argument.length(); i++)
+    {
+        // checks if a file was given
+        if (argument[i] == '.')
+        {
+            // checks if the file is a html file
+            string extension = argument.substr(i, argument.length()); // gets the extension of the file
+            if (extension != ".html")
+            {
+                // outputs error if not a html file
+                system("Color 04");
+                cout << "\a";
+                cout << "invalid file type" << endl;
+                return false;
+            }
+            else
+            {
+                // if the file is a html file, break out of the loop
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void errorPrinter(string str){
     system("Color 04");
     cout << "\a";
@@ -532,7 +558,53 @@ struct Program
         else  errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");
     }
 
-    void html() {}
+    void html() 
+    {
+            if (!correctSyntax) errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");
+            else if(numWords == 2) 
+            {
+                if (!checkHTML(commandWords[1])) errorPrinter("syntax error\nhtml <filename.html>");
+                else {constructHTML(commandWords[1]);}
+            }
+            else if (numWords == 3)
+            {
+                if (!checkCSV(commandWords[1]) || !checkHTML(commandWords[2])) errorPrinter("syntax error\nhtml <filename.csv> <filename.html>");
+                else {
+                    ifstream inputFile(commandWords[1]);
+                    if (!inputFile.is_open()) errorPrinter("file does not exist");
+                    else 
+                    {
+                        dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
+                        constructHTML(commandWords[2]);
+                    }
+                }
+            }
+        }
+
+        void constructHTML(string FILE)
+        {
+            int x = (numWords - 1); 
+            ofstream MyFile(FILE); 
+
+            MyFile << ("<table>\n"); 
+            for (int z = 0; z < numColumns; z++)
+            {
+                MyFile << "<td>" << columnNames[z] << "</td>";
+            }
+            for (int i = 0; i < numRows; i++)
+            {
+                MyFile << ("<tr>\n");
+                for (int j = 0; j < numColumns; j++)
+                {  
+                    MyFile << "<td>" << table[i][j] << "</td>";
+                    MyFile << endl;  
+                }
+                MyFile << ("</tr>\n");
+            }
+            MyFile << ("</table>\n");
+            MyFile.close();
+        }
+        
     void min()
     {
         if (!correctSyntax) errorPrinter("syntax error\nmin <column> (optional)");
@@ -1080,9 +1152,92 @@ struct Program
         }
     
     
-    void delete_() {}
-    void insert() {}
-    void replace() {}
+    void delrow() 
+    {
+        int rownum = stoi(commandWords[2]) - 1; 
+        table.erase(table.begin() + rownum);
+        numRows--; 
+        cout << "row successfully deleted" << endl;
+    }
+
+    void delcol() 
+    {
+        int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
+        for (int i = 0; i < numRows; i++)
+        {
+            table[i].erase(table[i].begin() + columnNumber);
+        }
+        numColumns--;
+        columnNames.erase(columnNames.begin() + columnNumber); 
+        system("Color 02");
+        cout << "column successfully deleted" << endl;
+    }
+
+    void deloccur() 
+    {
+        string occurnum = commandWords[3]; 
+        int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
+        for (int i = 0; i < table.size(); i++)
+        {
+            if (table[i][columnNumber] == occurnum)
+            {
+                table.erase(table.begin() + i);
+                numRows--;
+            }
+    
+        } cout << "Deleted row containing " << occurnum << endl;
+    }
+    
+    void delete_() 
+    {
+        string firstinput = commandWords[1];
+        if (numWords == 3)
+        {
+            if (commandWords[1] == "row") delrow();  
+            else if (commandWords[1] == "column") delcol(); 
+        }
+        else if (numWords == 4) deloccur(); 
+        else errorPrinter("syntax error\ndelete requies valid parameter");
+    }
+
+    void insert() {
+            if (numWords - 2 == numColumns)
+            {
+                vector<string> VectorRow; 
+                for (int i=2; i < numWords; i++){VectorRow.push_back(commandWords[i]);}
+                table.push_back(VectorRow);
+                numRows++;
+                cout << "Line successfully addeed, key in 'show' to check the result" << endl;
+            } else errorPrinter("syntax error\ninsert <number of data must be equal to number of column>\n type 'show' to check the number of column");
+            }
+
+    void replace(){
+        string firstvalue = commandWords[1];
+        string secondvalue = commandWords[2];
+        if (numWords == 3){
+        for (int i = 0; i < numRows; i++)
+        {
+            for (int z = 0; z < numColumns; z++){
+                if (table[i][z] == firstvalue)
+                    table[i][z] = secondvalue;}
+        }   
+        cout << "replaced every number = " <<  firstvalue
+        << " in all columns with " << secondvalue << "\n"; }
+        else if (numWords == 4){
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1) errorPrinter("column does not exist");
+            else
+            {
+                firstvalue = commandWords[2];
+                secondvalue = commandWords[3];
+                for (int i = 0; i < numRows; i++){
+                    if (table[i][columnNumber] == firstvalue)
+                    table[i][columnNumber] = secondvalue;}
+                cout << "Replaced all " << commandWords[2] << " to " << commandWords[3] << " for column " << commandWords[1] << endl;
+            }
+        }
+        else errorPrinter("syntax error\nCommand: replace");
+    }
 };
 
 int main()
