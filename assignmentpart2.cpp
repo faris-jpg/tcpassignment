@@ -524,9 +524,13 @@ struct Program
                 string cloneFileName = commandWords[2];
                 ofstream Cloned(cloneFileName);
                 string line;
-                while (getline(inputFile, line)) {Cloned << line << endl;}
-                cout << "File successfully cloned, the clone file is named: " << commandWords[2] << endl;}}
-        else  errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");}
+                while (getline(inputFile, line)) {Cloned << line << endl;
+                }
+                cout << "File successfully cloned, the clone file is named: " << commandWords[2] << endl;
+            }
+        }
+        else  errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");
+    }
 
     void html() {}
     void min()
@@ -828,7 +832,8 @@ struct Program
     else if (numWords == 1)
         {   
             cout << numRows << endl;
-        }}
+        }
+    }
 
     //COLUMNS
     void columns() {
@@ -836,7 +841,8 @@ struct Program
     else if (numWords == 1)
         {   
             cout << numColumns << endl;
-        }}
+        }
+    }
 
     int countNumbers(int columnNumber, int n){
         int count = 0;
@@ -848,15 +854,13 @@ struct Program
     }
 
     void countOccurences(vector<int>&numbers, vector<int>&numbersCounter, int columnNumber){
-        for (int i = 0; i < numRows; i++)
-                {
-                    int number = stoi(table[i][columnNumber]);
-                    if (find(numbers.begin(), numbers.end(), number) == numbers.end())
-                    {
-                        numbers.push_back(number);
-                        numbersCounter.push_back(countNumbers(columnNumber, number));
-                    }
-                }
+        for (int i = 0; i < numRows; i++){
+            int number = stoi(table[i][columnNumber]);
+            if (find(numbers.begin(), numbers.end(), number) == numbers.end()){
+            numbers.push_back(number);
+            numbersCounter.push_back(countNumbers(columnNumber, number));
+            }
+        }
     }
 
     //VHISTO
@@ -943,11 +947,14 @@ struct Program
 
     //HELP
     void help() {
+    if (!correctSyntax) errorPrinter("syntax error\nCommand: help");
+    else{
         system("Color 01");
         cout << "Command available:- \n-load \n-store \n-clone \n-html \n-min \n-max \n-median"
              << "\n-mean \n-variance \n-stdv \n-add \n-sub \n-corr \n-regression \n-show \n-titles \n-report" 
              << "\n-rows \n-columns \n-vhisto \n-hhisto \n-sort \n-oddrows \n-evenrows \n-primes \n-man \n-delete" 
              << "\n-insert \n-replace \n-exit \n<For more info about command,key in 'man (command)'>"<< endl;
+        }
     }
 
     //ODDROWS
@@ -963,7 +970,9 @@ struct Program
                 system("Color 02");
                 cout << table[i][j] << " ";
                 }
-            cout << endl;}}}
+            cout << endl;}
+        }
+    }
 
     //EVENROWS
     void evenrows() {
@@ -978,7 +987,9 @@ struct Program
                 system("Color 02");
                 cout << table[i][j] << " ";
                 }
-            cout << endl;}}}
+            cout << endl;}
+        }
+    }
 
     //PRIMEIDENTIFIER
     bool PrimeTester(int x) {
