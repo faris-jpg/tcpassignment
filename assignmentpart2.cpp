@@ -485,6 +485,7 @@ struct Program
                 inputFile.close(); // closes the file
             }
         }
+        else errorPrinter("Invalid file type");
     }
     void show() {
         if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
@@ -537,6 +538,7 @@ struct Program
                 inputFile.close(); // closes the file
                 cout << "File successfully stored, the name of the file is " << commandWords[1] << endl;}
         }
+        else errorPrinter("Invalid file type");
     }
 
     //CLONE
@@ -564,7 +566,11 @@ struct Program
             else if(numWords == 2) 
             {
                 if (!checkHTML(commandWords[1])) errorPrinter("syntax error\nhtml <filename.html>");
-                else {constructHTML(commandWords[1]);}
+                else {
+                    system("Color 02");
+                    constructHTML(commandWords[1]);
+                    cout << "html file successfully generated, the name of the file is " << commandWords[1] << endl; 
+                }
             }
             else if (numWords == 3)
             {
@@ -574,8 +580,10 @@ struct Program
                     if (!inputFile.is_open()) errorPrinter("file does not exist");
                     else 
                     {
+                        system("Color 02");
                         dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
                         constructHTML(commandWords[2]);
+                        cout << "html file successfully generated, the name of the file is " << commandWords[2] << endl; 
                     }
                 }
             }
@@ -666,6 +674,7 @@ struct Program
             for (int i = 0; i < numColumns; i++)
             {
                 vector<int> column, sortedColumn;
+                system("Color 02");
                 if (columnTypes[i] == "number")
                     cout << "median of column " << columnNames[i] << " is " 
                          << findMedian(table, i, numRows) << endl;
@@ -676,7 +685,8 @@ struct Program
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
             else
-            {
+            {   
+                system("Color 02");
                 cout << "median of column " << columnNames[columnNumber] << " is " 
                      << findMedian(table, columnNumber, numRows) << endl;
             }
