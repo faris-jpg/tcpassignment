@@ -108,13 +108,15 @@ bool checkSyntax2(vector<string> commandWords, int modeNumber, int numColumns)
         return (numWords == 1);
     case 26: // primes
         return (numWords == 2);
-    case 27: // delete
+    case 27: // man
+        return (numWords == 2);
+    case 28: // delete
         if (commandWords[1] == "occurrence") return (numWords == 4);
         else if (commandWords[1] == "column" || commandWords[1] == "row") return (numWords == 3);
         else return false;
-    case 28: // insert
+    case 29: // insert
         return (numWords == numColumns);
-    case 29: // replace
+    case 30: // replace
         return (numWords == 3 || numWords == 4);
     }
     return false;
