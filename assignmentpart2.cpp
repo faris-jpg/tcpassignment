@@ -160,6 +160,18 @@ float findMax(vector<vector<string>> table, int columnNumber, int numRows){
     return max;
 }
 
+int findMax(vector<int>table, int numRows){
+    int max = table[0];
+    for (int j = 1; j < numRows; j++)
+    {
+        if (table[j] > max)
+        {
+            max = table[j];
+        }
+    }
+    return max;
+}
+
 float findMean(vector<vector<string>> table, int columnNumber)
 {
     // finds the mean of a column
@@ -826,11 +838,92 @@ struct Program
             cout << numColumns << endl;
         }}
 
+    int countNumbers(int columnNumber, int n){
+        int count = 0;
+        for (int i = 0; i < numRows; i++)
+        {
+            if (stoi(table[i][columnNumber]) == n) count++;
+        }
+        return count;
+    }
+
+    void countOccurences(vector<int>&numbers, vector<int>&numbersCounter, int columnNumber){
+        for (int i = 0; i < numRows; i++)
+                {
+                    int number = stoi(table[i][columnNumber]);
+                    if (find(numbers.begin(), numbers.end(), number) == numbers.end())
+                    {
+                        numbers.push_back(number);
+                        numbersCounter.push_back(countNumbers(columnNumber, number));
+                    }
+                }
+    }
+
     //VHISTO
-    void vhisto() {}
+    void vhisto() 
+    {
+        vector<int> numbersCounter, numbers;
+        if(!correctSyntax) errorPrinter("syntax error\nCommand: hhisto <column>");
+        else if (numWords == 2)
+        {
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
+            else
+            {
+                countOccurences(numbers, numbersCounter, columnNumber);
+                for (int i = findMax(numbersCounter, numbersCounter.size()); i > 0 ; i--){
+                    cout.width(3);
+                    cout << right << i << '|';
+                    for (int j = 0; j < numbers.size(); j++)
+                    {
+                        if (numbersCounter[j] >= i)
+                        {
+                            system("Color 02");
+                            cout << "  *  ";
+                        }
+                        else cout << "     ";
+                    }
+                    cout << endl;
+                }
+                cout << "    ";
+                for(int i = 0; i < numbers.size(); i++) cout << " " << numbers[i] << "  ";
+                cout << '\n';
+            }
+        }
+    }
 
     //HHISTO
-    void hhisto() {}
+    void hhisto() 
+    {
+        vector<int> numbersCounter, numbers;
+        if(!correctSyntax) errorPrinter("syntax error\nCommand: hhisto <column>");
+        else if (numWords == 2)
+        {
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
+            else
+            {
+                countOccurences(numbers, numbersCounter, columnNumber);
+                cout << "     ";
+                for (int i = 1; i <= findMax(numbersCounter, numbersCounter.size()); i++){
+                    cout << i << "   ";
+                    if (i < 10) cout << " ";
+                }
+                cout << endl;
+                for (int i = 0; i < numbers.size(); i++)
+                {
+                    if(numbers[i]<10) cout << ' ';
+                    cout << numbers[i] << "|";
+                    for (int j = 0; j < numbersCounter[i]; j++)
+                    {
+                        system("Color 02");
+                        cout << "  *  ";
+                    }
+                    cout << endl;
+                }
+            }
+        }
+    }
 
     //SORT
     void sort() {
@@ -895,20 +988,27 @@ struct Program
         if (x % i == 0)
             return false;
         }
-    return true;}
+    return true;
+    }
     
     //PRIMES
     void primes() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: primes <column>");
-    else if (numWords == 2){
-        int columnNumber = checkColumn(commandWords[1], columnNames);
-        if (columnNumber == -1) errorPrinter("column does not exist");
-        else{
-            for (int i = 0; i < numRows; i++){
-                system("Color 02");
-                int x = stoi(table[i][columnNumber]);
-                if (PrimeTester(x)) {
-                    cout << x << endl;}}}}}
+        else if (numWords == 2)
+        {
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1) errorPrinter("column does not exist");
+            else
+            {
+                for (int i = 0; i < numRows; i++)
+                {
+                    system("Color 02");
+                    int x = stoi(table[i][columnNumber]);
+                    if (PrimeTester(x)) cout << x << endl;
+                }
+            }
+        }
+    }   
 
     //MAN
     void man() { system("Color 02");
