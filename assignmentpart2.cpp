@@ -289,6 +289,19 @@ struct Program
     vector<vector<string>> table;
     bool correctSyntax;
 
+    Program()
+    {
+        system("cls");
+        system("Color 01");
+        cout << "Program activated. Key in 'help' to check available command.\n";
+    }
+
+    ~Program()
+    {
+        system("Color 01");
+        cout << "\a";
+        cout << "Program terminated.";
+    }
     void get()
     {
         commandWords = {};
@@ -950,28 +963,14 @@ struct Program
     void insert() {}
     void replace() {}
 };
-void interpreterActivate()
-{
-    system("cls");
-    system("Color 01");
-    cout << "Program activated. Key in 'help' to check available command.\n";
-}
 
-void interpreterTerminate()
-{
-    system("Color 01");
-    cout << "\a";
-    cout << "Program terminated.";
-}
 int main()
 {
-    interpreterActivate();
     Program program;
     while (program.command != "exit")
     {
         program.get();
         program.runner();
     }
-    interpreterTerminate();
     return 0;
 }
