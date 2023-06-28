@@ -12,7 +12,6 @@ using namespace std;
 
 void makeLower(string &str)
 {
-
     for (int i = 0; i < str.length(); i++) // iterates through characters in string
     {
         str[i] = tolower(str[i]); // converts each to lower case
@@ -21,7 +20,6 @@ void makeLower(string &str)
 
 void seperateWords(string str, vector<string> &commandWords)
 {
-
     stringstream inputStream(str);
     string word;
     while (inputStream >> word) // seperates words by spaces
@@ -58,7 +56,6 @@ int findMode(string command)
 bool checkSyntax(vector<string> commandWords, int modeNumber, int numColumns)
 {
     // serves to check if the number of words is correct for each command.
-    //  leaves error message to the command to output
     int numWords = commandWords.size();
     switch (modeNumber)
     {
@@ -137,33 +134,33 @@ int checkColumn(string column, vector<string> columnNames)
 }
 
 float findMin(vector<vector<string>> table, int columnNumber, int numRows){
-    float min = stoi(table[0][columnNumber]);
+    float min = stoi(table[0][columnNumber]); // sets the minimum to the first value in the column
     for (int j = 1; j < numRows; j++)
-    {
+    { //loops through the column
         if (stoi(table[j][columnNumber]) < min)
-        {
+        { // if the value is less than the current minimum, set the minimum to that value
             min = stoi(table[j][columnNumber]);
         }
     }
-    return min;
+    return min; // returns the minimum
 }
 
 float findMax(vector<vector<string>> table, int columnNumber, int numRows){
-    float max = stoi(table[0][columnNumber]);
+    float max = stoi(table[0][columnNumber]); // sets the maximum to the first value in the column
     for (int j = 1; j < numRows; j++)
-    {
+    { //loops through the column
         if (stoi(table[j][columnNumber]) > max)
-        {
+        { // if the value is more than the current maximum, set the maximum to that value
             max = stoi(table[j][columnNumber]);
         }
     }
-    return max;
+    return max; // returns the maximum
 }
 
-int findMax(vector<int>table, int numRows){
-    int max = table[0];
+int findMax(vector<int>table, int numRows){ //function overloaded for histogram
+    int max = table[0]; // sets the maximum to the first value in the column
     for (int j = 1; j < numRows; j++)
-    {
+    { 
         if (table[j] > max)
         {
             max = table[j];
@@ -177,10 +174,10 @@ float findMean(vector<vector<string>> table, int columnNumber)
     // finds the mean of a column
     float sum = 0;
     for (int i = 0; i < table.size(); i++)
-    {
-        sum += stoi(table[i][columnNumber]);
+    { // loops through the column
+        sum += stoi(table[i][columnNumber]); // adds each value to the sum
     }
-    return sum / table.size();
+    return sum / table.size(); // returns the sum divided by the number of values
 }
 
 float findVariance(vector<vector<string>> table, int columnNumber)
@@ -280,23 +277,23 @@ bool checkHTML(string argument){
 }
 
 void errorPrinter(string str){
-    system("Color 04");
-    cout << "\a";
-    cout << str << endl;
+    system("Color 04"); // sets the colour to red
+    cout << "\a"; // makes a beep sound
+    cout << str << endl; //outputs the error message
 }
 
 void dataLoader(ifstream &inputFile, int &numColumns, int &numRows, vector<string> &columnNames, vector<string> &columnTypes, vector<vector<string>> &table){
     inputFile >> numColumns >> numRows; // gets the number of columns and rows
     string row;
     int rowCounter = -1;
-    while (getline(inputFile, row))
+    while (getline(inputFile, row)) // gets each row
     {
         vector<string> rowVector;
         stringstream rowStream(row);
         string word;
         while (getline(rowStream, word, ','))
-        { // seperates the words by commas
-            makeLower(word);
+        { // gets each word, seperates the words by commas
+            makeLower(word); // makes the word lower case
             if (word[0] == ' ') word = word.substr(1, word.length()); // removes the space at the beginning of the word                    
             if (rowCounter == 0) columnNames.push_back(word);// if it is the first row, save the column names
             else if (rowCounter == 1) columnTypes.push_back(word); // if it is the second row, save the column types
@@ -311,12 +308,12 @@ float findMedian(vector<vector<string>> table, int columnNumber, int numRows)
 {
     vector<int> column, sortedColumn;
     for (int j = 0; j < numRows; j++)
-    {
-        column.push_back(stoi(table[j][columnNumber]));
+    { // loops through the column
+        column.push_back(stoi(table[j][columnNumber])); // adds each value to a vector
     }
-    sortedColumn = sortColumn(column);
-    if (numRows%2) return sortedColumn[numRows/2];
-    else return (float)(sortedColumn[numRows/2] + sortedColumn[numRows/2 - 1])/2;
+    sortedColumn = sortColumn(column); // sorts the column
+    if (numRows%2) return sortedColumn[numRows/2]; // if the number of rows is odd, return the middle value
+    else return (float)(sortedColumn[numRows/2] + sortedColumn[numRows/2 - 1])/2; // if the number of rows is even, return the average of the two middle values
 }
 
 struct Program
@@ -328,15 +325,15 @@ struct Program
     bool correctSyntax;
 
     Program()
-    {
+    { // constructor
         system("cls");
-        system("Color 01");
+        system("Color 02");
         cout << "Program activated. Key in 'help' to check available command.\n";
     }
 
     ~Program()
-    {
-        system("Color 01");
+    { // destructor
+        system("Color 02");
         cout << "\a";
         cout << "Program terminated.";
     }
@@ -351,7 +348,7 @@ struct Program
         if(modeNumber < 15) correctSyntax = checkSyntax(commandWords, modeNumber, numColumns);
         else correctSyntax = checkSyntax2(commandWords, modeNumber, numColumns);
     }
-    void runner(){
+    void runner(){ // runs the correct function based on the mode number, seperated into four functions to be compact
         if (modeNumber == -1)
             errorPrinter("invalid command");
         else if (modeNumber <= 8) runner1();
@@ -472,14 +469,14 @@ struct Program
         }
     }
     void load()
-    {
-        if (!correctSyntax) errorPrinter("syntax error\nload <filename.csv>");
-        else if(checkCSV(commandWords[1])){
+    { // loads a csv file
+        if (!correctSyntax) errorPrinter("syntax error\nload <filename.csv>"); // checks if the syntax is correct
+        else if(checkCSV(commandWords[1])){ // checks if the file is a csv file
             ifstream inputFile(commandWords[1]);
-            if (!inputFile.is_open()) errorPrinter("file does not exist");
+            if (!inputFile.is_open()) errorPrinter("file does not exist"); // checks if the file exists
             else
             {
-                dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
+                dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table); // loads the data
                 system("Color 02");
                 cout << commandWords[1] << " has been loaded" << endl;
                 inputFile.close(); // closes the file
@@ -587,9 +584,9 @@ struct Program
         
     void min()
     {
-        if (!correctSyntax) errorPrinter("syntax error\nmin <column> (optional)");
+        if (!correctSyntax) errorPrinter("syntax error\nmin <column> (optional)"); // checks if the syntax is correct
         else if (numWords == 1)
-        {
+        { // if no column is specified, find the minimum of all the columns
             for (int i = 0; i < numColumns; i++)
             {
                 if (columnTypes[i] == "number")
@@ -600,10 +597,10 @@ struct Program
             }
         }
         else
-        { 
+        { // if a column is specified, find the minimum of that column
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number")
-                errorPrinter("column must exist and must be of type number");
+                errorPrinter("column must exist and must be of type number"); // checks if the column exists and is of type number
             else
             {                
                 system("Color 02");
@@ -612,7 +609,7 @@ struct Program
         }
     }
     void max()
-    {
+    { // same as min, but with max
         if (!correctSyntax) errorPrinter("syntax error\nmax <column> (optional)");
         else if (numWords == 1)
         {
@@ -639,10 +636,10 @@ struct Program
 
     }
     void median()
-    {
+    { // same as min, but with median
         if (!correctSyntax) errorPrinter("syntax error\nmedian <column> (optional)");
         else if (numWords == 1)
-        {
+        { // if no column is specified, find the median of all the columns
             for (int i = 0; i < numColumns; i++)
             {
                 vector<int> column, sortedColumn;
@@ -653,7 +650,7 @@ struct Program
             }
         }
         else
-        {
+        { // if a column is specified, find the median of that column
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
             else
@@ -665,11 +662,11 @@ struct Program
         }
     }
     void mean()
-    {
+    { // same as min, but with mean
         cout << setprecision(4) << fixed;
         if (!correctSyntax) errorPrinter("syntax error\nmean <column> (optional)");
         else if (numWords == 1)
-        {
+        { // if no column is specified, find the mean of all the columns
             for (int i = 0; i < numColumns; i++)
             {
                 if (columnTypes[i] == "number")
@@ -681,7 +678,7 @@ struct Program
             }
         }
         else
-        {
+        { // if a column is specified, find the mean of that column
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") 
             errorPrinter("column must exist and be of type number");
@@ -694,10 +691,10 @@ struct Program
         }
     }
     void variance()
-    {
+    { // same as min, but with variance
         if(!correctSyntax) errorPrinter("syntax error\nvariance <column> (optional)");
         else if (numWords == 1)
-        {
+        { // if no column is specified, find the variance of all the columns
             for (int i = 0; i < numColumns; i++)
             { // for eahc column
                 if (columnTypes[i] == "number")
@@ -708,7 +705,7 @@ struct Program
             }
         }
         else
-        {
+        { // if a column is specified, find the variance of that column
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1|| columnTypes[columnNumber] != "number")
                 errorPrinter("column must exist and be of type number");
@@ -720,10 +717,10 @@ struct Program
         }
     }
     void stdv()
-    {
+    { // same as min, but with standard deviation
         if (!correctSyntax) errorPrinter("syntax error\nstdv <column> (optional)");
         else if (numWords == 1)
-        {
+        { // if no column is specified, find the standard deviation of all the columns
             for (int i = 0; i < numColumns; i++)
             { // for eahc column
                 if (columnTypes[i] == "number")
@@ -734,7 +731,7 @@ struct Program
             }
         }
         else
-        {
+        { // if a column is specified, find the standard deviation of that column
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") 
                 errorPrinter("column must exist and be of type number");
@@ -747,83 +744,78 @@ struct Program
     }
     void sum()
     {
-        if (!correctSyntax) 
-        {
-        errorPrinter("syntax error\nsum <column1> <column2>"); 
-        return;
-        }    
-        int columnNumber1 = checkColumn(commandWords[1], columnNames),  columnNumber2 = checkColumn(commandWords[2], columnNames);
-        if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
-            errorPrinter("both columns must exist and be of type number");
-        else
-        {
-            system("Color 02");
-            int add, sum = 0;
-            for (int j = 0; j < numRows; j++)
+        if (!correctSyntax) errorPrinter("syntax error\nsum <column1> <column2>");
+        else{ 
+            int columnNumber1 = checkColumn(commandWords[1], columnNames),  columnNumber2 = checkColumn(commandWords[2], columnNames);
+            if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+                errorPrinter("both columns must exist and be of type number"); // checks if both the columns exist and are of type number
+            else
             {
-                add = stoi(table[j][columnNumber1]) + stoi(table[j][columnNumber2]);
-                cout << add << endl;
-                sum += add;
+                system("Color 02");
+                int add, sum = 0;
+                for (int j = 0; j < numRows; j++)
+                {
+                    add = stoi(table[j][columnNumber1]) + stoi(table[j][columnNumber2]); // adds the two values
+                    cout << add << endl; // outputs the sum of the two values
+                    sum += add;
+                }
+                cout << "total sum of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+                    << " is " << sum << endl; // outputs the total sum of the two columns
             }
-            cout << "total sum of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
-                 << " is " << sum << endl;
         }
     }
     void difference()
-    {
-        if (!correctSyntax)
-        {
-            errorPrinter("diff <column1> <column2>");
-            return;
-        }
-        int columnNumber1 = checkColumn(commandWords[1], columnNames);
-        int columnNumber2 = checkColumn(commandWords[2], columnNames);
-        if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
-            errorPrinter("both columns must exist and be of type number");
+    { // same as sum, but with difference
+        if (!correctSyntax) errorPrinter("diff <column1> <column2>");
         else
         {
-            system("Color 02");
-            int diff, sum = 0;
-            for (int j = 0; j < numRows; j++)
+            int columnNumber1 = checkColumn(commandWords[1], columnNames);
+            int columnNumber2 = checkColumn(commandWords[2], columnNames);
+            if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+                errorPrinter("both columns must exist and be of type number");
+            else
             {
-                diff = stoi(table[j][columnNumber1]) - stoi(table[j][columnNumber2]);
-                cout << diff << endl;
-                sum += diff;
+                system("Color 02");
+                int diff, sum = 0;
+                for (int j = 0; j < numRows; j++)
+                {
+                    diff = stoi(table[j][columnNumber1]) - stoi(table[j][columnNumber2]); // finds the difference between the two values
+                    cout << diff << endl; // outputs the difference
+                    sum += diff; // adds the difference to the sum
+                }
+                cout << "total difference of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2] << " is " << sum << endl;
             }
-            cout << "total difference of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2] << " is " << sum << endl;
         }
     }
     void corr()
-    {
-        if (!correctSyntax)
-        {
-            errorPrinter("corr <column1> <column2>");
-            return;
-        }
-        int columnNumber1 = checkColumn(commandWords[1], columnNames);
-        int columnNumber2 = checkColumn(commandWords[2], columnNames);
-        if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
-            errorPrinter("both columns must exist and be of type number");
-        else
-        {
-        float mean1 = findMean(table, columnNumber1);
-        float mean2 = findMean(table, columnNumber2);
-        float numerator = 0, denominator1 = 0, denominator2 = 0, denominator = 0;
-        for (int i = 0; i < numRows; i++)
-        {
-            numerator += (stoi(table[i][columnNumber1]) - mean1) * (stoi(table[i][columnNumber2]) - mean2);
-            denominator1 += pow(stoi(table[i][columnNumber1]) - mean1, 2);
-            denominator2 += pow(stoi(table[i][columnNumber2]) - mean2, 2);
-        }
-        denominator = sqrt(denominator1 * denominator2);
-        system("Color 02");
-        cout << "correlation between columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
-             << " is " << numerator / denominator << endl;
+    { // finds the correlation between two columns
+        if (!correctSyntax) errorPrinter("corr <column1> <column2>");
+        else {
+            int columnNumber1 = checkColumn(commandWords[1], columnNames);
+            int columnNumber2 = checkColumn(commandWords[2], columnNames);
+            if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
+                errorPrinter("both columns must exist and be of type number"); // checks if both the columns exist and are of type number
+            else
+            {
+            float mean1 = findMean(table, columnNumber1); // finds the mean of the first column
+            float mean2 = findMean(table, columnNumber2); // finds the mean of the second column
+            float numerator = 0, denominator1 = 0, denominator2 = 0, denominator = 0;
+            for (int i = 0; i < numRows; i++)
+            {
+                numerator += (stoi(table[i][columnNumber1]) - mean1) * (stoi(table[i][columnNumber2]) - mean2); // finds the numerator of the correlation formula
+                denominator1 += pow(stoi(table[i][columnNumber1]) - mean1, 2); // finds the first part of the denominator of the correlation formula
+                denominator2 += pow(stoi(table[i][columnNumber2]) - mean2, 2); // finds the second part of the denominator of the correlation formula
+            }
+            denominator = sqrt(denominator1 * denominator2); 
+            system("Color 02");
+            cout << "correlation between columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
+                << " is " << numerator / denominator << endl; // outputs the correlation
 
+            }
         }
     }
     void regression() 
-    { 
+    { // finds the regression line between two columns
         if(!correctSyntax)
         {
             errorPrinter("syntax error\nregression <column1> <column2>");
@@ -832,16 +824,16 @@ struct Program
         int columnNumber1 = checkColumn(commandWords[1], columnNames);
         int columnNumber2 = checkColumn(commandWords[2], columnNames);
         if (columnNumber1 == -1 || columnNumber2 == -1 || columnTypes[columnNumber1] != "number" || columnTypes[columnNumber2] != "number")
-            errorPrinter("both columns must exist and be of type number");
+            errorPrinter("both columns must exist and be of type number"); // checks if both the columns exist and are of type number
         else
         {
             float sumX = 0, sumX2 = 0, sumY = 0, sumXY = 0;
             for (int i = 0; i < numRows; i++)
             {
-                sumX += stoi(table[i][columnNumber1]);
-                sumX2 += pow(stoi(table[i][columnNumber1]), 2);
-                sumY += stoi(table[i][columnNumber2]);  
-                sumXY += stoi(table[i][columnNumber1]) * stoi(table[i][columnNumber2]);
+                sumX += stoi(table[i][columnNumber1]); // finds the sum of the first column
+                sumX2 += pow(stoi(table[i][columnNumber1]), 2); // finds the sum of the squares of the first column
+                sumY += stoi(table[i][columnNumber2]);   // finds the sum of the second column
+                sumXY += stoi(table[i][columnNumber1]) * stoi(table[i][columnNumber2]); // finds the sum of the product of the two columns
             }
             float b1 = (numRows * sumXY - sumX * sumY) / (numRows * sumX2 - pow(sumX, 2));
             float b0 = (sumY - b1 * sumX) / numRows;
@@ -933,28 +925,28 @@ struct Program
         vector<int> numbersCounter, numbers;
         if(!correctSyntax) errorPrinter("syntax error\nCommand: hhisto <column>");
         else if (numWords == 2)
-        {
+        { // counts the occurences of each number in a column, and then prints a vertical histogram
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
             else
             {
-                countOccurences(numbers, numbersCounter, columnNumber);
+                countOccurences(numbers, numbersCounter, columnNumber); //counts the number of occurences of each number
                 for (int i = findMax(numbersCounter, numbersCounter.size()); i > 0 ; i--){
-                    cout.width(3);
-                    cout << right << i << '|';
+                    cout.width(3); 
+                    cout << right << i << '|'; // prints the y axis which is the frequency
                     for (int j = 0; j < numbers.size(); j++)
-                    {
+                    { // if the number of occurence of a number is greater or equal to the current level of frequency
                         if (numbersCounter[j] >= i)
                         {
-                            system("Color 02");
-                            cout << "  *  ";
+                            system("Color 02"); 
+                            cout << "  X  ";  //print an x
                         }
-                        else cout << "     ";
+                        else cout << "     ";  // otherwise print a space
                     }
                     cout << endl;
                 }
-                cout << "    ";
-                for(int i = 0; i < numbers.size(); i++) cout << " " << numbers[i] << "  ";
+                cout << "    "; 
+                for(int i = 0; i < numbers.size(); i++) cout << " " << numbers[i] << "  "; // prints the x axis which is the number
                 cout << '\n';
             }
         }
@@ -962,11 +954,11 @@ struct Program
 
     //HHISTO
     void hhisto() 
-    {
+    { // same as vhisto, but with a horizontal histogram
         vector<int> numbersCounter, numbers;
         if(!correctSyntax) errorPrinter("syntax error\nCommand: hhisto <column>");
         else if (numWords == 2)
-        {
+        { // counts the occurences of each number in a column, and then prints a horizontal histogram
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
             else
@@ -974,18 +966,18 @@ struct Program
                 countOccurences(numbers, numbersCounter, columnNumber);
                 cout << "     ";
                 for (int i = 1; i <= findMax(numbersCounter, numbersCounter.size()); i++){
-                    cout << i << "   ";
-                    if (i < 10) cout << " ";
+                    cout << i << "   "; // prints the x axis which is the frequency
+                    if (i < 10) cout << " "; // if the number is less than 10, print an extra space to make the histogram look better
                 }
                 cout << endl;
                 for (int i = 0; i < numbers.size(); i++)
-                {
-                    if(numbers[i]<10) cout << ' ';
-                    cout << numbers[i] << "|";
+                { // for each number
+                    if(numbers[i]<10) cout << ' '; // if the number is less than 10, print an extra space to make the histogram look better
+                    cout << numbers[i] << "|"; // prints the y axis which is the number
                     for (int j = 0; j < numbersCounter[i]; j++)
                     {
                         system("Color 02");
-                        cout << "  *  ";
+                        cout << "  X  "; // prints an x for each occurence of the number
                     }
                     cout << endl;
                 }
@@ -993,7 +985,7 @@ struct Program
         }
     }
 
-    int countNumbers(int columnNumber, int n){
+    int countNumbers(int columnNumber, int n){ // takes an integer and counts the number of times it occurs in a column
         int count = 0;
         for (int i = 0; i < numRows; i++)
         {
@@ -1003,11 +995,11 @@ struct Program
     }
 
     void countOccurences(vector<int>&numbers, vector<int>&numbersCounter, int columnNumber){
-        for (int i = 0; i < numRows; i++){
+        for (int i = 0; i < numRows; i++){ // for each number in the column
             int number = stoi(table[i][columnNumber]);
-            if (find(numbers.begin(), numbers.end(), number) == numbers.end()){
-            numbers.push_back(number);
-            numbersCounter.push_back(countNumbers(columnNumber, number));
+            if (find(numbers.begin(), numbers.end(), number) == numbers.end()){ // if the number is not in the vector of numbers that were already counted
+            numbers.push_back(number); // add the number to the vector of numbers
+            numbersCounter.push_back(countNumbers(columnNumber, number)); // count the number of occurences of the number and add it to the vector of numbersCounter
             }
         }
     }
@@ -1261,8 +1253,8 @@ int main()
     Program program;
     while (program.command != "exit")
     {
-        program.get();
-        program.runner();
+        program.get(); // gets the command
+        program.runner(); // runs the command
     }
     return 0;
 }
