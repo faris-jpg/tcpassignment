@@ -330,13 +330,13 @@ struct Program
     Program()
     {
         system("cls");
-        system("Color 02");
+        system("Color 01");
         cout << "Program activated. Key in 'help' to check available command.\n";
     }
 
     ~Program()
     {
-        system("Color 04");
+        system("Color 01");
         cout << "\a";
         cout << "Program terminated.";
     }
@@ -487,34 +487,7 @@ struct Program
         }
         else errorPrinter("Invalid file type");
     }
-    void show() {
-        if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
-        else if (numWords == 1)
-        {
-            for (int i = 0; i < numRows; i++)
-            {
-                for (int j = 0; j < numColumns; j++)
-                {
-                    system("Color 02");
-                    cout << table[i][j] << " ";
-                }
-                cout << endl;
-            }
-        }
-        else
-        {
-            int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1) errorPrinter("column does not exist");
-            else
-            {
-                for (int i = 0; i < numRows; i++)
-                {
-                    system("Color 02");
-                    cout << table[i][columnNumber] << endl;
-                }
-            }
-        }
-    }
+
     //STORE
     void store() {
         if (!correctSyntax) errorPrinter("syntax error\nstore <filename.csv>");
@@ -573,7 +546,7 @@ struct Program
             }
             else if (numWords == 3)
             {
-                if (!checkCSV(commandWords[1]) || !checkHTML(commandWords[2])) errorPrinter("syntax error\nhtml <filename.csv> <filename.html>");
+                if (!checkCSV(commandWords[1]) && !checkHTML(commandWords[2])) errorPrinter("syntax error\nhtml <filename.csv> <filename.html>");
                 else {
                     ifstream inputFile(commandWords[1]);
                     if (!inputFile.is_open()) errorPrinter("file does not exist");
@@ -789,7 +762,7 @@ struct Program
             for (int j = 0; j < numRows; j++)
             {
                 add = stoi(table[j][columnNumber1]) + stoi(table[j][columnNumber2]);
-                cout << "Row " << j + 1 << ": " << add << endl;
+                cout << add << endl;
                 sum += add;
             }
             cout << "total sum of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
@@ -814,7 +787,7 @@ struct Program
             for (int j = 0; j < numRows; j++)
             {
                 diff = stoi(table[j][columnNumber1]) - stoi(table[j][columnNumber2]);
-                cout << "Row " << j + 1 << ": " << diff << endl;
+                cout << diff << endl;
                 sum += diff;
             }
             cout << "total difference of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2] << " is " << sum << endl;
@@ -878,6 +851,35 @@ struct Program
         }
     }
 
+    void show() { //SHOW
+        if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
+        else if (numWords == 1)
+        {
+            for (int i = 0; i < numRows; i++)
+            {
+                for (int j = 0; j < numColumns; j++)
+                {
+                    system("Color 02");
+                    cout << table[i][j] << " ";
+                }
+                cout << endl;
+            }
+        }
+        else
+        {
+            int columnNumber = checkColumn(commandWords[1], columnNames);
+            if (columnNumber == -1) errorPrinter("column does not exist");
+            else
+            {
+                for (int i = 0; i < numRows; i++)
+                {
+                    system("Color 02");
+                    cout << table[i][columnNumber] << endl;
+                }
+            }
+        }
+    }
+
     // TITLES
     void titles() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: titles");
@@ -925,25 +927,6 @@ struct Program
         }
     }
 
-    int countNumbers(int columnNumber, int n){
-        int count = 0;
-        for (int i = 0; i < numRows; i++)
-        {
-            if (stoi(table[i][columnNumber]) == n) count++;
-        }
-        return count;
-    }
-
-    void countOccurences(vector<int>&numbers, vector<int>&numbersCounter, int columnNumber){
-        for (int i = 0; i < numRows; i++){
-            int number = stoi(table[i][columnNumber]);
-            if (find(numbers.begin(), numbers.end(), number) == numbers.end()){
-            numbers.push_back(number);
-            numbersCounter.push_back(countNumbers(columnNumber, number));
-            }
-        }
-    }
-
     //VHISTO
     void vhisto() 
     {
@@ -964,7 +947,7 @@ struct Program
                         if (numbersCounter[j] >= i)
                         {
                             system("Color 02");
-                            cout << "  X  ";
+                            cout << "  *  ";
                         }
                         else cout << "     ";
                     }
@@ -1002,10 +985,29 @@ struct Program
                     for (int j = 0; j < numbersCounter[i]; j++)
                     {
                         system("Color 02");
-                        cout << "  X  ";
+                        cout << "  *  ";
                     }
                     cout << endl;
                 }
+            }
+        }
+    }
+
+    int countNumbers(int columnNumber, int n){
+        int count = 0;
+        for (int i = 0; i < numRows; i++)
+        {
+            if (stoi(table[i][columnNumber]) == n) count++;
+        }
+        return count;
+    }
+
+    void countOccurences(vector<int>&numbers, vector<int>&numbersCounter, int columnNumber){
+        for (int i = 0; i < numRows; i++){
+            int number = stoi(table[i][columnNumber]);
+            if (find(numbers.begin(), numbers.end(), number) == numbers.end()){
+            numbers.push_back(number);
+            numbersCounter.push_back(countNumbers(columnNumber, number));
             }
         }
     }
@@ -1037,6 +1039,64 @@ struct Program
              << "\n-insert \n-replace \n-exit \n<For more info about command,key in 'man (command)'>"<< endl;
         }
     }
+
+    //MAN
+    void man() { 
+        system("Color 02");
+        if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
+        else if (numWords == 2){
+        int x = findMode(commandWords[1]);
+        if ( x == 1){cout << "Command: load <csv file>\nReads the file named filename and "
+        << "parses its contents and stores it into arrays or vectors."<< endl;}
+        else if ( x== 2){cout <<"Command: store <csv file>\nSave the active array or vectors into "
+        << "a csv formatted file with the name filename"<< endl;}
+        else if ( x == 3){cout <<"Command: clone <csv file> <csv file>\nCreate a copy of file1 and name it file2." << endl;}
+        else if ( x == 4){cout <<"Command: html <html file> Or html <csv file> <html file>\nGenerates an HTML document for the loaded data and "
+        << " store it in the specific file.\n-Or-\nRead the a.csv file and convert it to an html table with proper column titles and format."  <<endl;}
+        else if ( x == 5){cout <<"Command: min Or min <column name>\nShows the minimum of all the columns.\n-Or-\nDisplay the minimum of the "
+        << "specific column." << endl;}
+        else if ( x == 6){cout <<"Command: max Or max <column name>\nShows the maximum of all the columns.\n-Or-\nDisplay the maximum of the "
+        << "specific column." << endl;}
+        else if ( x == 7){cout <<"Command: median Or median <column name>\nShows the median of all the columns.\n-Or-\nDisplay the median of the "
+        << "specific column." << endl;}
+        else if ( x == 8){cout <<"Command: mean Or mean <column name>\nShows the mean of all the columns.\n-Or-\nDisplay the mean of the "
+        << "specific column." << endl;}
+        else if ( x == 9){cout <<"Command: variance Or variance <column name>\nShows the variance of all the columns.\n-Or-\nDisplay the "
+        << "variance of the specific column." << endl;}
+        else if ( x == 10){cout <<"Command: stdv Or stdv <column name>\nShows the standard division of all the columns.\n-Or-\nDisplay "
+        << "the standard division of the specific column." << endl;}
+        else if ( x == 11){cout <<"Command: add <column name 1> <column name 2>\nDisplays a column resulted from adding the "
+        << "column name 1 and column name 2." << endl;}
+        else if ( x == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
+        << "column name 1 and column name 2." << endl;}
+        else if (findMode(commandWords[1])>= 13 || findMode(commandWords[1]) == -1) {man2(x);}
+            }
+        }
+
+        void man2(int x){ 
+        system("Color 02");
+        if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
+        << "column name 1 and the column name 2 using Pearson correlation." << endl;}
+        else if ( x == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
+        << "a selected column." << endl;}
+        else if( x == 15) cout << "Command: show or show <column>\n Displays data from file or column\n";
+        else if ( x == 16) cout << "Command: titles\nDisplays titles of all columns\n"; //titles
+        else if ( x == 17) cout << "Command: report\nDisplays a report that shows all statistics for all columns\n"; //report
+        else if ( x == 18) cout << "Command: rows\nDisplay number of rows loaded.\n"; //rows 
+        else if ( x == 19) cout << "Command: columns\nDisplay number of columns loaded.\n"; //columns
+        else if ( x == 20) cout << "Command: vhisto <column>\nDisplays vertical histogram for the column.\n"; //vhisto
+        else if ( x == 21) cout << "Command: hhisto <column>\nDisplays horizontal histogram for the column.\n"; //hhisto
+        else if ( x == 22) cout << "Command: sort <column>\nSorts data in ascending order according to the column value\n"; //sort 
+        else if ( x == 24) cout << "Command: oddrows\nDisplay odd rows from table\n"; //oddrows
+        else if ( x == 25) cout << "Command: evenrows\nDisplay even rows from table\n"; // evenrows
+        else if ( x == 26) cout << "Command: primes <column>\nShows prime numbers in the column.\n"; //primes
+        else if ( x == 28) cout << "Command: delete occurance <column name> <integer> Or delete row <integer> Or delete column <column name> "
+        << " \nDelete the row that contain the specific number in the specific column.\n-Or-\nDelete the specific row\n-Or-\nDelete the specific column.\n"; //delete
+        else if ( x == 29) cout << "Command: insert row <data according to the column catergories.>\nAdd a new row of data.\n"; //insert
+        else if ( x == 30) cout << "Command: replace <integer> <integer> Or replace <column name> <integer> <integer>\nReplace the specific value with the new specific value."
+        << "\n-Or-\nReplace the specific value with the new specific value in the specific column"; //replace
+        else errorPrinter("syntax error\nCommand: man <command>");
+        }
 
     //ODDROWS
     void oddrows() {
@@ -1101,75 +1161,34 @@ struct Program
             }
         }
     }   
-
-    //MAN
-    void man() { 
-        system("Color 02");
-        if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
-        else if (numWords == 2){
-            int x = findMode(commandWords[1]);
-            if ( x == 1){cout << "Command: load <csv file>\nReads the file named filename and "
-            << "parses its contents and stores it into arrays or vectors."<< endl;}
-            else if ( x== 2){cout <<"Command: store <csv file>\nSave the active array or vectors into "
-            << "a csv formatted file with the name filename"<< endl;}
-            else if ( x == 3){cout <<"Command: clone <csv file> <csv file>\nCreate a copy of file1 and name it file2." << endl;}
-            else if ( x == 4){cout <<"Command: html <html file> Or html <csv file> <html file>\nGenerates an HTML document for the loaded data and "
-            << " store it in the specific file.\n-Or-\nRead the a.csv file and convert it to an html table with proper column titles and format."  <<endl;}
-            else if ( x == 5){cout <<"Command: min Or min <column name>\nShows the minimum of all the columns.\n-Or-\nDisplay the minimum of the "
-            << "specific column." << endl;}
-            else if ( x == 6){cout <<"Command: max Or max <column name>\nShows the maximum of all the columns.\n-Or-\nDisplay the maximum of the "
-            << "specific column." << endl;}
-            else if ( x == 7){cout <<"Command: median Or median <column name>\nShows the median of all the columns.\n-Or-\nDisplay the median of the "
-            << "specific column." << endl;}
-            else if ( x == 8){cout <<"Command: mean Or mean <column name>\nShows the mean of all the columns.\n-Or-\nDisplay the mean of the "
-            << "specific column." << endl;}
-            else if ( x == 9){cout <<"Command: variance Or variance <column name>\nShows the variance of all the columns.\n-Or-\nDisplay the "
-            << "variance of the specific column." << endl;}
-            else if ( x == 10){cout <<"Command: stdv Or stdv <column name>\nShows the standard division of all the columns.\n-Or-\nDisplay "
-            << "the standard division of the specific column." << endl;}
-            else if ( x == 11){cout <<"Command: add <column name 1> <column name 2>\nDisplays a column resulted from adding the "
-            << "column name 1 and column name 2." << endl;}
-            else if ( x == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
-            << "column name 1 and column name 2." << endl;}
-            else if (findMode(commandWords[1])>= 13 || findMode(commandWords[1]) == -1) {man2(x);}
+    
+    void deloccur() //DELETE OCCURRENCE
+    {
+        string occurnum = commandWords[3]; 
+        int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
+        int i = 0; 
+        while (i < table.size())
+        {
+            if (table[i][columnNumber] == occurnum)
+            {
+                table.erase(table.begin() + i);
+                numRows--;
             }
-        }
-
-    void man2(int x){ 
-        system("Color 02");
-        if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
-        << "column name 1 and the column name 2 using Pearson correlation." << endl;}
-        else if ( x == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
-        << "a selected column." << endl;}
-        else if( x == 15) cout << "Command: show or show <column>\n Displays data from file or column\n";
-        else if ( x == 16) cout << "Command: titles\nDisplays titles of all columns\n"; //titles
-        else if ( x == 17) cout << "Command: report\nDisplays a report that shows all statistics for all columns\n"; //report
-        else if ( x == 18) cout << "Command: rows\nDisplay number of rows loaded.\n"; //rows 
-        else if ( x == 19) cout << "Command: columns\nDisplay number of columns loaded.\n"; //columns
-        else if ( x == 20) cout << "Command: vhisto <column>\nDisplays vertical histogram for the column.\n"; //vhisto
-        else if ( x == 21) cout << "Command: hhisto <column>\nDisplays horizontal histogram for the column.\n"; //hhisto
-        else if ( x == 22) cout << "Command: sort <column>\nSorts data in ascending order according to the column value\n"; //sort 
-        else if ( x == 24) cout << "Command: oddrows\nDisplay odd rows from table\n"; //oddrows
-        else if ( x == 25) cout << "Command: evenrows\nDisplay even rows from table\n"; // evenrows
-        else if ( x == 26) cout << "Command: primes <column>\nShows prime numbers in the column.\n"; //primes
-        else if ( x == 28) cout << "Command: delete occurance <column name> <integer> Or delete row <integer> Or delete column <column name> "
-        << " \nDelete the row that contain the specific number in the specific column.\n-Or-\nDelete the specific row\n-Or-\nDelete the specific column.\n"; //delete
-        else if ( x == 29) cout << "Command: insert row <data according to the column catergories.>\nAdd a new row of data.\n"; //insert
-        else if ( x == 30) cout << "Command: replace <integer> <integer> Or replace <column name> <integer> <integer>\nReplace the specific value with the new specific value."
-        << "\n-Or-\nReplace the specific value with the new specific value in the specific column"; //replace
-        else errorPrinter("syntax error\nCommand: man <command>");
+            i++; 
+        } system("Color 02"); 
+        cout << "Deleted row containing " << occurnum << endl;
     }
-    
-    
-    void delrow() 
+
+    void delrow() //DELETE ROW 
     {
         int rownum = stoi(commandWords[2]) - 1; 
         table.erase(table.begin() + rownum);
         numRows--; 
+        system("Color 02");
         cout << "row successfully deleted" << endl;
     }
 
-    void delcol() 
+    void delcol() // DELETE COLUMN
     {
         int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
         for (int i = 0; i < numRows; i++)
@@ -1181,25 +1200,9 @@ struct Program
         system("Color 02");
         cout << "column successfully deleted" << endl;
     }
-
-    void deloccur() 
-    {
-        string occurnum = commandWords[3]; 
-        int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
-        for (int i = 0; i < table.size(); i++)
-        {
-            if (table[i][columnNumber] == occurnum)
-            {
-                table.erase(table.begin() + i);
-                numRows--;
-            }
     
-        } cout << "Deleted row containing " << occurnum << endl;
-    }
-    
-    void delete_() 
+    void delete_() // GENERAL DELETE FUNCTION
     {
-        string firstinput = commandWords[1];
         if (numWords == 3)
         {
             if (commandWords[1] == "row") delrow();  
@@ -1209,18 +1212,20 @@ struct Program
         else errorPrinter("syntax error\ndelete requies valid parameter");
     }
 
-    void insert() {
+    void insert() { //INSERT ROW 
             if (numWords - 2 == numColumns)
             {
                 vector<string> VectorRow; 
-                for (int i=2; i < numWords; i++){VectorRow.push_back(commandWords[i]);}
+                for (int i=2; i < numWords; i++)
+                    VectorRow.push_back(commandWords[i]);
                 table.push_back(VectorRow);
                 numRows++;
-                cout << "Line successfully addeed, key in 'show' to check the result" << endl;
+                system("Color 02");
+                cout << "Line successfully added, key in 'show' to check the result" << endl;
             } else errorPrinter("syntax error\ninsert <number of data must be equal to number of column>\n type 'show' to check the number of column");
             }
 
-    void replace(){
+    void replace(){ //REPLACE
         string firstvalue = commandWords[1];
         string secondvalue = commandWords[2];
         if (numWords == 3){
@@ -1230,6 +1235,7 @@ struct Program
                 if (table[i][z] == firstvalue)
                     table[i][z] = secondvalue;}
         }   
+        system("Color 02");
         cout << "replaced every number = " <<  firstvalue
         << " in all columns with " << secondvalue << "\n"; }
         else if (numWords == 4){
@@ -1241,7 +1247,8 @@ struct Program
                 secondvalue = commandWords[3];
                 for (int i = 0; i < numRows; i++){
                     if (table[i][columnNumber] == firstvalue)
-                    table[i][columnNumber] = secondvalue;}
+                        table[i][columnNumber] = secondvalue;}
+                system("Color 02");
                 cout << "Replaced all " << commandWords[2] << " to " << commandWords[3] << " for column " << commandWords[1] << endl;
             }
         }
