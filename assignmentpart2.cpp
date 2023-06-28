@@ -330,13 +330,13 @@ struct Program
     Program()
     {
         system("cls");
-        system("Color 01");
+        system("Color 02");
         cout << "Program activated. Key in 'help' to check available command.\n";
     }
 
     ~Program()
     {
-        system("Color 01");
+        system("Color 04");
         cout << "\a";
         cout << "Program terminated.";
     }
@@ -789,7 +789,7 @@ struct Program
             for (int j = 0; j < numRows; j++)
             {
                 add = stoi(table[j][columnNumber1]) + stoi(table[j][columnNumber2]);
-                cout << add << endl;
+                cout << "Row " << j + 1 << ": " << add << endl;
                 sum += add;
             }
             cout << "total sum of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
@@ -814,7 +814,7 @@ struct Program
             for (int j = 0; j < numRows; j++)
             {
                 diff = stoi(table[j][columnNumber1]) - stoi(table[j][columnNumber2]);
-                cout << diff << endl;
+                cout << "Row " << j + 1 << ": " << diff << endl;
                 sum += diff;
             }
             cout << "total difference of columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2] << " is " << sum << endl;
@@ -964,7 +964,7 @@ struct Program
                         if (numbersCounter[j] >= i)
                         {
                             system("Color 02");
-                            cout << "  *  ";
+                            cout << "  X  ";
                         }
                         else cout << "     ";
                     }
@@ -1002,7 +1002,7 @@ struct Program
                     for (int j = 0; j < numbersCounter[i]; j++)
                     {
                         system("Color 02");
-                        cout << "  *  ";
+                        cout << "  X  ";
                     }
                     cout << endl;
                 }
@@ -1107,35 +1107,35 @@ struct Program
         system("Color 02");
         if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
         else if (numWords == 2){
-        int x = findMode(commandWords[1]);
-        if ( x == 1){cout << "Command: load <csv file>\nReads the file named filename and "
-        << "parses its contents and stores it into arrays or vectors."<< endl;}
-        else if ( x== 2){cout <<"Command: store <csv file>\nSave the active array or vectors into "
-        << "a csv formatted file with the name filename"<< endl;}
-        else if ( x == 3){cout <<"Command: clone <csv file> <csv file>\nCreate a copy of file1 and name it file2." << endl;}
-        else if ( x == 4){cout <<"Command: html <html file> Or html <csv file> <html file>\nGenerates an HTML document for the loaded data and "
-        << " store it in the specific file.\n-Or-\nRead the a.csv file and convert it to an html table with proper column titles and format."  <<endl;}
-        else if ( x == 5){cout <<"Command: min Or min <column name>\nShows the minimum of all the columns.\n-Or-\nDisplay the minimum of the "
-        << "specific column." << endl;}
-        else if ( x == 6){cout <<"Command: max Or max <column name>\nShows the maximum of all the columns.\n-Or-\nDisplay the maximum of the "
-        << "specific column." << endl;}
-        else if ( x == 7){cout <<"Command: median Or median <column name>\nShows the median of all the columns.\n-Or-\nDisplay the median of the "
-        << "specific column." << endl;}
-        else if ( x == 8){cout <<"Command: mean Or mean <column name>\nShows the mean of all the columns.\n-Or-\nDisplay the mean of the "
-        << "specific column." << endl;}
-        else if ( x == 9){cout <<"Command: variance Or variance <column name>\nShows the variance of all the columns.\n-Or-\nDisplay the "
-        << "variance of the specific column." << endl;}
-        else if ( x == 10){cout <<"Command: stdv Or stdv <column name>\nShows the standard division of all the columns.\n-Or-\nDisplay "
-        << "the standard division of the specific column." << endl;}
-        else if ( x == 11){cout <<"Command: add <column name 1> <column name 2>\nDisplays a column resulted from adding the "
-        << "column name 1 and column name 2." << endl;}
-        else if ( x == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
-        << "column name 1 and column name 2." << endl;}
-        else if (findMode(commandWords[1])>= 13 || findMode(commandWords[1]) == -1) {man2(x);}
+            int x = findMode(commandWords[1]);
+            if ( x == 1){cout << "Command: load <csv file>\nReads the file named filename and "
+            << "parses its contents and stores it into arrays or vectors."<< endl;}
+            else if ( x== 2){cout <<"Command: store <csv file>\nSave the active array or vectors into "
+            << "a csv formatted file with the name filename"<< endl;}
+            else if ( x == 3){cout <<"Command: clone <csv file> <csv file>\nCreate a copy of file1 and name it file2." << endl;}
+            else if ( x == 4){cout <<"Command: html <html file> Or html <csv file> <html file>\nGenerates an HTML document for the loaded data and "
+            << " store it in the specific file.\n-Or-\nRead the a.csv file and convert it to an html table with proper column titles and format."  <<endl;}
+            else if ( x == 5){cout <<"Command: min Or min <column name>\nShows the minimum of all the columns.\n-Or-\nDisplay the minimum of the "
+            << "specific column." << endl;}
+            else if ( x == 6){cout <<"Command: max Or max <column name>\nShows the maximum of all the columns.\n-Or-\nDisplay the maximum of the "
+            << "specific column." << endl;}
+            else if ( x == 7){cout <<"Command: median Or median <column name>\nShows the median of all the columns.\n-Or-\nDisplay the median of the "
+            << "specific column." << endl;}
+            else if ( x == 8){cout <<"Command: mean Or mean <column name>\nShows the mean of all the columns.\n-Or-\nDisplay the mean of the "
+            << "specific column." << endl;}
+            else if ( x == 9){cout <<"Command: variance Or variance <column name>\nShows the variance of all the columns.\n-Or-\nDisplay the "
+            << "variance of the specific column." << endl;}
+            else if ( x == 10){cout <<"Command: stdv Or stdv <column name>\nShows the standard division of all the columns.\n-Or-\nDisplay "
+            << "the standard division of the specific column." << endl;}
+            else if ( x == 11){cout <<"Command: add <column name 1> <column name 2>\nDisplays a column resulted from adding the "
+            << "column name 1 and column name 2." << endl;}
+            else if ( x == 12){cout <<"Command: sub <column name 1> <column name 2>\nDisplays a column resulted from subtracting the "
+            << "column name 1 and column name 2." << endl;}
+            else if (findMode(commandWords[1])>= 13 || findMode(commandWords[1]) == -1) {man2(x);}
             }
         }
 
-        void man2(int x){ 
+    void man2(int x){ 
         system("Color 02");
         if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
         << "column name 1 and the column name 2 using Pearson correlation." << endl;}
@@ -1158,7 +1158,7 @@ struct Program
         else if ( x == 30) cout << "Command: replace <integer> <integer> Or replace <column name> <integer> <integer>\nReplace the specific value with the new specific value."
         << "\n-Or-\nReplace the specific value with the new specific value in the specific column"; //replace
         else errorPrinter("syntax error\nCommand: man <command>");
-        }
+    }
     
     
     void delrow() 
