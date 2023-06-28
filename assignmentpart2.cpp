@@ -550,10 +550,9 @@ struct Program
             else{
                 system("Color 02");
                 string cloneFileName = commandWords[2];
-                ofstream Cloned(cloneFileName);
+                ofstream cloned(cloneFileName);
                 string line;
-                while (getline(inputFile, line)) {Cloned << line << endl;
-                }
+                while (getline(inputFile, line)) cloned << line << endl;
                 cout << "File successfully cloned, the clone file is named: " << commandWords[2] << endl;
             }
         }
@@ -589,29 +588,29 @@ struct Program
             }
         }
 
-        void constructHTML(string FILE)
-        {
-            int x = (numWords - 1); 
-            ofstream MyFile(FILE); 
+    void constructHTML(string file)
+    {
+        int x = (numWords - 1); 
+        ofstream MyFile(file); 
 
-            MyFile << ("<table>\n"); 
-            for (int z = 0; z < numColumns; z++)
-            {
-                MyFile << "<td>" << columnNames[z] << "</td>";
-            }
-            for (int i = 0; i < numRows; i++)
-            {
-                MyFile << ("<tr>\n");
-                for (int j = 0; j < numColumns; j++)
-                {  
-                    MyFile << "<td>" << table[i][j] << "</td>";
-                    MyFile << endl;  
-                }
-                MyFile << ("</tr>\n");
-            }
-            MyFile << ("</table>\n");
-            MyFile.close();
+        MyFile << ("<table>\n"); 
+        for (int z = 0; z < numColumns; z++)
+        {
+            MyFile << "<td>" << columnNames[z] << "</td>";
         }
+        for (int i = 0; i < numRows; i++)
+        {
+            MyFile << ("<tr>\n");
+            for (int j = 0; j < numColumns; j++)
+            {  
+                MyFile << "<td>" << table[i][j] << "</td>";
+                MyFile << endl;  
+            }
+            MyFile << ("</tr>\n");
+        }
+        MyFile << ("</table>\n");
+        MyFile.close();
+    }
         
     void min()
     {
