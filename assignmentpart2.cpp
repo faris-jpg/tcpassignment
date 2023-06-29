@@ -349,7 +349,7 @@ struct Program
         else correctSyntax = checkSyntax2(commandWords, modeNumber, numColumns);
     }
     void runner(){ // runs the correct function based on the mode number, seperated into four functions to be compact
-        if(!dataLoaded && (modeNumber != 4 && modeNumber != 23 && modeNumber != 27 && modeNumber != 31)) errorPrinter("no data loaded"); // checks if data is loaded
+        if(!dataLoaded && (modeNumber != 1 && modeNumber != 4 && modeNumber != 23 && modeNumber != 27 && modeNumber != 31)) errorPrinter("no data loaded"); // checks if data is loaded
         else if (modeNumber == -1) errorPrinter("invalid command");
         else if (modeNumber <= 8) runner1();
         else if (modeNumber <= 17) runner2();
