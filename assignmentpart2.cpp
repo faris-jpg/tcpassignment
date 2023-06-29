@@ -234,7 +234,6 @@ bool checkCSV(string argument){
             if (extension != ".csv")
             {
                 // outputs error if not a csv file
-                system("Color 04");
                 cout << "\a";
                 cout << "invalid file type" << endl
                     << "load <filename.csv>" << endl;
@@ -261,7 +260,6 @@ bool checkHTML(string argument){
             if (extension != ".html")
             {
                 // outputs error if not a html file
-                system("Color 04");
                 cout << "\a";
                 cout << "invalid file type" << endl;
                 return false;
@@ -277,7 +275,6 @@ bool checkHTML(string argument){
 }
 
 void errorPrinter(string str){
-    system("Color 04"); // sets the colour to red
     cout << "\a"; // makes a beep sound
     cout << str << endl; //outputs the error message
 }
@@ -326,14 +323,11 @@ struct Program
 
     Program()
     { // constructor
-        system("cls");
-        system("Color 02");
         cout << "Program activated. Key in 'help' to check available command.\n";
     }
 
     ~Program()
     { // destructor
-        system("Color 02");
         cout << "\a";
         cout << "Program terminated.";
     }
@@ -478,7 +472,6 @@ struct Program
             {
                 columnNames = {}, columnTypes = {}, table = {}; // resets the column names, column types and table
                 dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table); // loads the data
-                system("Color 02");
                 cout << commandWords[1] << " has been loaded" << endl;
                 dataLoaded = true; // sets dataLoaded to true
                 inputFile.close(); // closes the file
@@ -494,7 +487,6 @@ struct Program
             ofstream inputFile(commandWords[1]);
             if (!inputFile.is_open()) errorPrinter("file does not exist");
             else{
-                system("Color 02");
                 inputFile << numColumns << endl << numRows << endl;
                 for (int i = 0; i < columnNames.size(); i++){
                     inputFile << columnNames[i];
@@ -506,7 +498,6 @@ struct Program
                 inputFile << endl;
                 for (int i = 0; i < numRows; i++){
                     for (int j = 0; j < numColumns; j++){
-                        system("Color 02");
                         inputFile << table[i][j];
                         if (j != numColumns - 1) inputFile << ',';}
                         inputFile << endl;}
@@ -523,7 +514,6 @@ struct Program
             ifstream inputFile(commandWords[1]);
             if (!inputFile.is_open()) errorPrinter("file does not exist");
             else{
-                system("Color 02");
                 string cloneFileName = commandWords[2];
                 ofstream cloned(cloneFileName);
                 string line;
@@ -537,26 +527,24 @@ struct Program
     void html() 
     {
             if (!correctSyntax) errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");
-            else if(numWords == 2) 
+            else if(numWords == 2) // if 2 words including command entered to terminal
             {
                 if (!checkHTML(commandWords[1])) errorPrinter("syntax error\nhtml <filename.html>");
-                else if (!dataLoaded)
+                else if (!dataLoaded) //if data not loaded
                 errorPrinter("no data loaded");
-                else {
-                    system("Color 02");
+                else {//creates html file 
                     constructHTML(commandWords[1]);
                     cout << "html file successfully generated, the name of the file is " << commandWords[1] << endl; 
-                }
+                } 
             }
-            else if (numWords == 3)
+            else if (numWords == 3) // if 3 words including command entered to terminal
             {
                 if (!checkCSV(commandWords[1]) && !checkHTML(commandWords[2])) errorPrinter("syntax error\nhtml <filename.csv> <filename.html>");
                 else {
-                    ifstream inputFile(commandWords[1]);
+                    ifstream inputFile(commandWords[1]); //takes in csv file, and allows to write to other files
                     if (!inputFile.is_open()) errorPrinter("file does not exist");
                     else 
-                    {
-                        system("Color 02");
+                    { //resets columnNames,columnTypes,table to avoid overrwrite of data, takes in data from csv, and creates html file
                         columnNames = {}, columnTypes = {}, table = {};
                         dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
                         constructHTML(commandWords[2]);
@@ -599,7 +587,6 @@ struct Program
             { // loops through columns
                 if (columnTypes[i] == "number")
                 { // checks if the column is of type number
-                    system("Color 02");
                     cout << "minimum of column " << columnNames[i] << " is " << findMin(table, i, numRows) << endl; // outputs the minimum of the column
                 }
             }
@@ -611,7 +598,6 @@ struct Program
                 errorPrinter("column must exist and must be of type number"); // checks if the column exists and is of type number
             else
             {                
-                system("Color 02");
                 cout << "minimum of column " << columnNames[columnNumber] << " is " << findMin(table, columnNumber, numRows) << endl; // outputs the minimum of the column
             }
         }
@@ -625,7 +611,6 @@ struct Program
             { // for each column
                 if (columnTypes[i] == "number")
                 { // checks if the column is of type number
-                    system("Color 02");
                     cout << "maximum of column " << columnNames[i] << " is " << findMax(table, i, numRows) << endl;
                 }
             }
@@ -637,7 +622,6 @@ struct Program
                 errorPrinter("column does not exist and must be of type number"); // checks if the column exists and is of type number
             else
             {                
-                system("Color 02");
                 cout << "maximum of column " << columnNames[columnNumber] << " is " << findMax(table, columnNumber, numRows) << endl; // outputs the maximum of the column
             }
         }
@@ -651,7 +635,6 @@ struct Program
             for (int i = 0; i < numColumns; i++)
             {
                 vector<int> column, sortedColumn;
-                system("Color 02");
                 if (columnTypes[i] == "number")
                     cout << "median of column " << columnNames[i] << " is " 
                          << findMedian(table, i, numRows) << endl; // outputs the median of the column
@@ -663,7 +646,6 @@ struct Program
             if (columnNumber == -1 || columnTypes[columnNumber] != "number") errorPrinter("column must exist and be of type number");
             else
             {   
-                system("Color 02");
                 cout << "median of column " << columnNames[columnNumber] << " is " 
                      << findMedian(table, columnNumber, numRows) << endl; // outputs the median of the column
             }
@@ -679,7 +661,6 @@ struct Program
             {
                 if (columnTypes[i] == "number")
                 {
-                    system("Color 02");
                     cout << "mean of column " << columnNames[i]
                          << " is " << findMean(table, i) << endl;
                 }
@@ -692,7 +673,6 @@ struct Program
             errorPrinter("column must exist and be of type number");
             else
             {
-                system("Color 02");
                 cout << "mean of column " << columnNames[columnNumber]
                      << " is " << findMean(table, columnNumber) << endl;
             }
@@ -707,7 +687,6 @@ struct Program
             { // for eahc column
                 if (columnTypes[i] == "number")
                 {
-                    system("Color 02");
                     cout << setprecision(4) << fixed << "variance of column " << columnNames[i] << " is " << findVariance(table, i) << endl;
                 }
             }
@@ -719,7 +698,6 @@ struct Program
                 errorPrinter("column must exist and be of type number");
             else
             {
-                system("Color 02");
                 cout << setprecision(4) << fixed << "variance of column " << columnNames[columnNumber] << " is " << findVariance(table, columnNumber) << endl;
             }
         }
@@ -733,7 +711,6 @@ struct Program
             { // for eahc column
                 if (columnTypes[i] == "number")
                 {
-                    system("Color 02");
                     cout << setprecision(4) << fixed << "standard deviation of column " << columnNames[i] << " is " << sqrt(findVariance(table, i)) << endl;
                 }
             }
@@ -745,7 +722,6 @@ struct Program
                 errorPrinter("column must exist and be of type number");
             else
             {
-                system("Color 02");
                 cout << setprecision(4) << fixed << "standard deviation of column " << columnNames[columnNumber] << " is " << sqrt(findVariance(table, columnNumber)) << endl;
             }
         }
@@ -759,7 +735,6 @@ struct Program
                 errorPrinter("both columns must exist and be of type number"); // checks if both the columns exist and are of type number
             else
             {
-                system("Color 02");
                 int add, sum = 0;
                 for (int j = 0; j < numRows; j++)
                 {
@@ -783,7 +758,6 @@ struct Program
                 errorPrinter("both columns must exist and be of type number");
             else
             {
-                system("Color 02");
                 int diff, sum = 0;
                 for (int j = 0; j < numRows; j++)
                 {
@@ -815,7 +789,6 @@ struct Program
                 denominator2 += pow(stoi(table[i][columnNumber2]) - mean2, 2); // finds the second part of the denominator of the correlation formula
             }
             denominator = sqrt(denominator1 * denominator2); 
-            system("Color 02");
             cout << "correlation between columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
                 << " is " << numerator / denominator << endl; // outputs the correlation
 
@@ -845,7 +818,6 @@ struct Program
             }
             float b1 = (numRows * sumXY - sumX * sumY) / (numRows * sumX2 - pow(sumX, 2));
             float b0 = (sumY - b1 * sumX) / numRows;
-            system("Color 02");
             cout << "regression line for columns " << columnNames[columnNumber1] << " and " << columnNames[columnNumber2]
                 << " is " << b0 << " + " << b1 << "x" << endl;
         }
@@ -859,7 +831,6 @@ struct Program
             {
                 for (int j = 0; j < numColumns; j++)
                 {
-                    system("Color 02");
                     cout << table[i][j] << " "; //Print out all the content in the table
                 }
                 cout << endl;
@@ -874,7 +845,6 @@ struct Program
                 cout << "Column: " << commandWords[1] <<  endl;
                 for (int i = 0; i < numRows; i++) 
                 {
-                    system("Color 02");
                     cout << table[i][columnNumber] << endl;  //Print out the content of the column
                 }
             }
@@ -914,7 +884,6 @@ struct Program
     if (!correctSyntax) errorPrinter("syntax error\nCommand: rows");
     else if (numWords == 1) //Check Syntax
         {   
-            system("Color 02");
             cout << "Number of rows: " << numRows << endl; //Display the number of rows
         }
     }
@@ -924,7 +893,6 @@ struct Program
     if (!correctSyntax) errorPrinter("syntax error\nCommand: columns");
     else if (numWords == 1) //Check Syntax
         {   
-            system("Color 02");
             cout << "Number of columns: " << numColumns << endl; //Display the number of columns
         }
     }
@@ -948,7 +916,6 @@ struct Program
                     { // if the number of occurence of a number is greater or equal to the current level of frequency
                         if (numbersCounter[j] >= i)
                         {
-                            system("Color 02"); 
                             cout << "  X  ";  //print an x
                         }
                         else cout << "     ";  // otherwise print a space
@@ -986,7 +953,6 @@ struct Program
                     cout << numbers[i] << "|"; // prints the y axis which is the number
                     for (int j = 0; j < numbersCounter[i]; j++)
                     {
-                        system("Color 02");
                         cout << "  X  "; // prints an x for each occurence of the number
                     }
                     cout << endl;
@@ -1021,7 +987,6 @@ struct Program
         int columnNumber = checkColumn(commandWords[1], columnNames);
         if (columnNumber == -1) errorPrinter("column does not exist"); //Check if the column user key in exist or not
         else{
-                system("Color 02");
                 cout << "Successfully sort data according to " << commandWords[1] << " from ascending order\nType 'show' to see the result" << endl;
                 for (int i = 0; i < numRows; i++){
                     for (int j = 0; j < numRows - i - 1; ++j) {
@@ -1038,7 +1003,6 @@ struct Program
     void help() { //Print out the available command
     if (!correctSyntax) errorPrinter("syntax error\nCommand: help");
     else{ //Check Syntax
-        system("Color 01");
         cout << "Command available:- \n-load \n-store \n-clone \n-html \n-min \n-max \n-median"
              << "\n-mean \n-variance \n-stdv \n-add \n-sub \n-corr \n-regression \n-show \n-titles \n-report" 
              << "\n-rows \n-columns \n-vhisto \n-hhisto \n-sort \n-oddrows \n-evenrows \n-primes \n-man \n-delete" 
@@ -1048,7 +1012,6 @@ struct Program
 
     //MAN
     void man() { //Check the value of which the command lies in and print out the manual according to it, findMode will return -1 if command doesn't exist
-        system("Color 02"); 
         if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
         else if (numWords == 2){ //Check Syntax
         int x = findMode(commandWords[1]);
@@ -1080,7 +1043,6 @@ struct Program
         }
 
         void man2(int x){ 
-        system("Color 02");
         if ( x ==  13){cout <<"Command: corr <column name 1> <column name 2>\nComputes the correlation between the "
         << "column name 1 and the column name 2 using Pearson correlation." << endl;}
         else if ( x == 14){cout <<"Command: regression <column name>\nCompute the linear regression line formula for "
@@ -1114,7 +1076,6 @@ struct Program
             cout << "This is row " << (i+1) << ", The content is: ";
             for (int j = 0; j < numColumns; j++)
                 {
-                system("Color 02");
                 cout << table[i][j] << " ";  //Print out the content of the rows if the number of rows is odd
                 }
             cout << endl;}
@@ -1131,7 +1092,6 @@ struct Program
             cout << "This is row " << (i+1) << ", The content is: ";
             for (int j = 0; j < numColumns; j++)
                 {
-                system("Color 02");
                 cout << table[i][j] << " "; //Print out the content of the rows if the number of rows is even
                 }
             cout << endl;}
@@ -1160,7 +1120,6 @@ struct Program
             {
                 for (int i = 0; i < numRows; i++)
                 {
-                    system("Color 02");
                     int x = stoi(table[i][columnNumber]); //Take the value of specified column,determine if its prime number or not
                     if (PrimeTester(x)) cout << x << endl; //Then output the content of the specified column if the value is a prime number
                 }
@@ -1174,23 +1133,22 @@ struct Program
         string occurnum = commandWords[3]; 
         int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
         int i = 0; 
-        while (i < table.size())
+        while (i < table.size()) //iterates through each row at specified column
         {
-            if (table[i][columnNumber] == occurnum)
+            if (table[i][columnNumber] == occurnum) //if data matches with occurnum, delete row
             {
                 table.erase(table.begin() + i);
-                numRows--;
+                numRows--; //decrement total number of rows
             } else i++; 
-        } system("Color 02"); 
+        } 
         cout << "Deleted row containing " << occurnum << endl;
     }
 
     void delrow() //DELETE ROW 
     {
-        int rownum = stoi(commandWords[2]) - 1; 
-        table.erase(table.begin() + rownum);
-        numRows--; 
-        system("Color 02");
+        int rownum = stoi(commandWords[2]) - 1;  //string after command taken as row number to be deleted
+        table.erase(table.begin() + rownum); // erases specified row in table 
+        numRows--; //decrements total number of rows 
         cout << "row successfully deleted" << endl;
     }
 
@@ -1199,22 +1157,21 @@ struct Program
         int columnNumber = checkColumn(commandWords[2], columnNames); //returns index of column
         for (int i = 0; i < numRows; i++)
         {
-            table[i].erase(table[i].begin() + columnNumber);
+            table[i].erase(table[i].begin() + columnNumber); //erases value in the specific column for each row
         }
-        numColumns--;
-        columnNames.erase(columnNames.begin() + columnNumber); 
-        system("Color 02");
+        numColumns--; //decrement total number of columns
+        columnNames.erase(columnNames.begin() + columnNumber); //erase the column name as well 
         cout << "column successfully deleted" << endl;
     }
     
     void delete_() // GENERAL DELETE FUNCTION
     {
-        if (numWords == 3)
+        if (numWords == 3) //if number of words inputted is 3 
         {
-            if (commandWords[1] == "row") delrow();  
-            else if (commandWords[1] == "column") delcol(); 
+            if (commandWords[1] == "row") delrow();  //calls delete row if string after command is "row"
+            else if (commandWords[1] == "column") delcol(); //calls delete column if string after command is "column"
         }
-        else if (numWords == 4) deloccur(); 
+        else if (numWords == 4) deloccur(); //calls delete occurrence if number of words inputted is 4
         else errorPrinter("syntax error\ndelete requies valid parameter");
     }
 
@@ -1223,38 +1180,35 @@ struct Program
             {
                 vector<string> VectorRow; 
                 for (int i=2; i < numWords; i++)
-                    VectorRow.push_back(commandWords[i]);
-                table.push_back(VectorRow);
-                numRows++;
-                system("Color 02");
+                    VectorRow.push_back(commandWords[i]); //each dataset pushed into "VectorRow"
+                table.push_back(VectorRow); //"VectorRow" pushed into table 
+                numRows++; //total number of rows decremented by 1
                 cout << "Line successfully added, key in 'show' to check the result" << endl;
             } else errorPrinter("syntax error\ninsert <number of data must be equal to number of column>\n type 'show' to check the number of column");
             }
 
     void replace(){ //REPLACE
-        string firstvalue = commandWords[1]; string secondvalue = commandWords[2];
-        if (numWords == 3) {
+        string firstvalue = commandWords[1]; string secondvalue = commandWords[2]; //first string and second string after command stored 
+        if (numWords == 3) { //if 3 words inputted to terminal
         for (int i = 0; i < numRows; i++)
         {
-            for (int z = 0; z < numColumns; z++){
-                if (table[i][z] == firstvalue)
-                    table[i][z] = secondvalue;}
+            for (int z = 0; z < numColumns; z++){ //iterates through each postiion in row and column 
+                if (table[i][z] == firstvalue) //if value to be replaced is at that specific position, replace with new value 
+                    table[i][z] = secondvalue;} 
         }   
-            system("Color 02");
             cout << "replaced every number = " <<  firstvalue << " in all columns with " << secondvalue << "\n"; 
         }
         
-        else if (numWords == 4){
-            int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1) errorPrinter("column does not exist");
+        else if (numWords == 4){ //if 4 words inputted to terminal
+            int columnNumber = checkColumn(commandWords[1], columnNames); //checks if position of column can be found
+            if (columnNumber == -1) errorPrinter("column does not exist"); 
             else
             {
                 firstvalue = commandWords[2];
                 secondvalue = commandWords[3];
-                for (int i = 0; i < numRows; i++){
-                    if (table[i][columnNumber] == firstvalue)
-                        table[i][columnNumber] = secondvalue;}
-                system("Color 02");
+                for (int i = 0; i < numRows; i++){ //iterates through each row in column
+                    if (table[i][columnNumber] == firstvalue) 
+                        table[i][columnNumber] = secondvalue;} //if data at position same, replaces with the new value
                 cout << "Replaced all " << commandWords[2] << " to " << commandWords[3] << " for column " << commandWords[1] << endl;
             }
         } else errorPrinter("syntax error\nCommand: replace");
@@ -1263,6 +1217,12 @@ struct Program
 
 int main()
 {
+    /* 
+    Faris Imran bin Muhammad Faisal, 1221304603, TC01/TT4L, Group 10 
+    Hafizul Faris bin Abdul Samad, 1221304530, TC01/TT4L, Group 10
+    Chua Kee Ray, 1201103232, TC01/TT4L, Group 10
+    */
+
     Program program;
     while (program.command != "exit")
     {
