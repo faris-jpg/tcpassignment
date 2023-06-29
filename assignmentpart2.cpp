@@ -476,6 +476,7 @@ struct Program
             if (!inputFile.is_open()) errorPrinter("file does not exist"); // checks if the file exists
             else
             {
+                columnNames = {}, columnTypes = {}, table = {}; // resets the column names, column types and table
                 dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table); // loads the data
                 system("Color 02");
                 cout << commandWords[1] << " has been loaded" << endl;
