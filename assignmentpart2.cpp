@@ -479,6 +479,7 @@ struct Program
                 dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table); // loads the data
                 system("Color 02");
                 cout << commandWords[1] << " has been loaded" << endl;
+                dataLoaded = true; // sets dataLoaded to true
                 inputFile.close(); // closes the file
             }
         }
