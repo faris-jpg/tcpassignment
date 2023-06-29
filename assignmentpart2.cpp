@@ -557,6 +557,7 @@ struct Program
                     else 
                     {
                         system("Color 02");
+                        columnNames = {}, columnTypes = {}, table = {};
                         dataLoader(inputFile, numColumns, numRows, columnNames, columnTypes, table);
                         constructHTML(commandWords[2]);
                         cout << "html file successfully generated, the name of the file is " << commandWords[2] << endl; 
