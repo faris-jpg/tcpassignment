@@ -483,22 +483,22 @@ struct Program
     //STORE
     void store() {
         if (!correctSyntax) errorPrinter("syntax error\nstore <filename.csv>");
-        else if(checkCSV(commandWords[1])){
-            ofstream inputFile(commandWords[1]);
+        else if(checkCSV(commandWords[1])){ //Check Syntax
+            ofstream inputFile(commandWords[1]); //Open file
             if (!inputFile.is_open()) errorPrinter("file does not exist");
             else{
-                inputFile << numColumns << endl << numRows << endl;
+                inputFile << numColumns << endl << numRows << endl; //Save in number of columns and row
                 for (int i = 0; i < columnNames.size(); i++){
-                    inputFile << columnNames[i];
+                    inputFile << columnNames[i]; // Save in column names
                     if (i != columnNames.size() - 1) inputFile << ',';}
                 inputFile << endl;
-                for (int i = 0; i < columnTypes.size(); i++) {
+                for (int i = 0; i < columnTypes.size(); i++) { //Save in column types
                     inputFile << columnTypes[i];
                     if (i != columnTypes.size() - 1) inputFile << ',';}
                 inputFile << endl;
                 for (int i = 0; i < numRows; i++){
                     for (int j = 0; j < numColumns; j++){
-                        inputFile << table[i][j];
+                        inputFile << table[i][j]; //Save in the content of the table
                         if (j != numColumns - 1) inputFile << ',';}
                         inputFile << endl;}
                 inputFile.close(); // closes the file
@@ -510,14 +510,14 @@ struct Program
     //CLONE
     void clone() {
         if (!correctSyntax) errorPrinter("syntax error\nclone <filename.csv> <filename.csv>");
-        else if(checkCSV(commandWords[1]) && checkCSV(commandWords[2])){
+        else if(checkCSV(commandWords[1]) && checkCSV(commandWords[2])){ //Check Syntax
             ifstream inputFile(commandWords[1]);
-            if (!inputFile.is_open()) errorPrinter("file does not exist");
+            if (!inputFile.is_open()) errorPrinter("file does not exist"); //Check if file exist or not
             else{
-                string cloneFileName = commandWords[2];
-                ofstream cloned(cloneFileName);
+                string cloneFileName = commandWords[2]; //Get name for clone file
+                ofstream cloned(cloneFileName); //Open/Create a file with the specified name
                 string line;
-                while (getline(inputFile, line)) cloned << line << endl;
+                while (getline(inputFile, line)) cloned << line << endl; //Copy content from loaded file to clone file
                 cout << "File successfully cloned, the clone file is named: " << commandWords[2] << endl;
             }
         }
