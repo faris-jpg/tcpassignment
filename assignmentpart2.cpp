@@ -853,14 +853,14 @@ struct Program
 
     void show() { //SHOW
         if (!correctSyntax) errorPrinter("syntax error\nshow <column> (optional)");
-        else if (numWords == 1)
+        else if (numWords == 1) //Check Syntax
         {
             for (int i = 0; i < numRows; i++)
             {
                 for (int j = 0; j < numColumns; j++)
                 {
                     system("Color 02");
-                    cout << table[i][j] << " ";
+                    cout << table[i][j] << " "; //Print out all the content in the table
                 }
                 cout << endl;
             }
@@ -868,13 +868,14 @@ struct Program
         else
         {
             int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1) errorPrinter("column does not exist");
+            if (columnNumber == -1) errorPrinter("column does not exist"); //Check if the column exist
             else
             {
-                for (int i = 0; i < numRows; i++)
+                cout << "Column: " << commandWords[1] <<  endl;
+                for (int i = 0; i < numRows; i++) 
                 {
                     system("Color 02");
-                    cout << table[i][columnNumber] << endl;
+                    cout << table[i][columnNumber] << endl;  //Print out the content of the column
                 }
             }
         }
@@ -883,15 +884,14 @@ struct Program
     // TITLES
     void titles() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: titles");
-    else if (numWords == 1)
+    else if (numWords == 1) //Check Syntax
         {
-            cout << "The titles in the files are: ";
-            for (int i = 0; i < columnNames.size(); ++i)
-    {
-        cout << columnNames[i];
-        if (i != columnNames.size() - 1)
-            cout << " , ";
-    }
+            cout << "The titles in the files are: "; 
+            for (int i = 0; i < columnNames.size(); ++i){ //Print out the names of the column
+                cout << columnNames[i];
+                if (i != columnNames.size() - 1)
+                cout << " , ";
+            }
         }
         cout << endl;
     }
@@ -899,7 +899,7 @@ struct Program
     //REPORT
     void report() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: report");
-    else if (numWords == 1){
+    else if (numWords == 1){ //Call each of the function needed for the display of the statistic and display them
         cout << "MINIMUM:-\n" << endl; min(); 
         cout << "\nMAXIMUM:-\n"; max(); 
         cout << "\nMEDIAN:-\n"; median();  
@@ -912,18 +912,20 @@ struct Program
     //ROWS
     void rows() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: rows");
-    else if (numWords == 1)
+    else if (numWords == 1) //Check Syntax
         {   
-            cout << numRows << endl;
+            system("Color 02");
+            cout << "Number of rows: " << numRows << endl; //Display the number of rows
         }
     }
 
     //COLUMNS
     void columns() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: columns");
-    else if (numWords == 1)
+    else if (numWords == 1) //Check Syntax
         {   
-            cout << numColumns << endl;
+            system("Color 02");
+            cout << "Number of columns: " << numColumns << endl; //Display the number of columns
         }
     }
 
@@ -1014,37 +1016,41 @@ struct Program
 
     //SORT
     void sort() {
-        if (!correctSyntax) errorPrinter("syntax error\nCommand: sort <column>");
+        if (!correctSyntax) errorPrinter("syntax error\nCommand: sort <column>"); //Check Syntax
         else if (numWords == 2){
         int columnNumber = checkColumn(commandWords[1], columnNames);
-        if (columnNumber == -1) errorPrinter("column does not exist");
+        if (columnNumber == -1) errorPrinter("column does not exist"); //Check if the column user key in exist or not
         else{
+                system("Color 02");
                 cout << "Successfully sort data according to " << commandWords[1] << " from ascending order\nType 'show' to see the result" << endl;
                 for (int i = 0; i < numRows; i++){
                     for (int j = 0; j < numRows - i - 1; ++j) {
                         if (table[j][columnNumber] > table[j + 1][columnNumber]) {
-                        swap(table[j], table[j + 1]);}}}
+                        swap(table[j], table[j + 1]); //Check if the value of the specified column in row j is larger than row j+1, if it is, swap
+                            }
+                        }
+                    } 
             }
         }
     }
 
     //HELP
-    void help() {
+    void help() { //Print out the available command
     if (!correctSyntax) errorPrinter("syntax error\nCommand: help");
-    else{
+    else{ //Check Syntax
         system("Color 01");
         cout << "Command available:- \n-load \n-store \n-clone \n-html \n-min \n-max \n-median"
              << "\n-mean \n-variance \n-stdv \n-add \n-sub \n-corr \n-regression \n-show \n-titles \n-report" 
              << "\n-rows \n-columns \n-vhisto \n-hhisto \n-sort \n-oddrows \n-evenrows \n-primes \n-man \n-delete" 
-             << "\n-insert \n-replace \n-exit \n<For more info about command,key in 'man (command)'>"<< endl;
+             << "\n-insert \n-replace \n-exit \n<For more info about command,key in 'man (command)'>"<< endl; //Print out the available command.
         }
     }
 
     //MAN
-    void man() { 
-        system("Color 02");
+    void man() { //Check the value of which the command lies in and print out the manual according to it, findMode will return -1 if command doesn't exist
+        system("Color 02"); 
         if (numWords < 2 || numWords > 2) errorPrinter("syntax error\nCommand: man <command>");
-        else if (numWords == 2){
+        else if (numWords == 2){ //Check Syntax
         int x = findMode(commandWords[1]);
         if ( x == 1){cout << "Command: load <csv file>\nReads the file named filename and "
         << "parses its contents and stores it into arrays or vectors."<< endl;}
@@ -1099,17 +1105,17 @@ struct Program
         }
 
     //ODDROWS
-    void oddrows() {
+    void oddrows() { 
     if (!correctSyntax) errorPrinter("syntax error\nCommand: oddrows");
-    else if (numWords == 1)
+    else if (numWords == 1) //Check Syntax
     for (int i = 0; i < numRows; i++)
         {
-            if ((i-1) % 2 != 0){
+            if ((i-1) % 2 != 0){  //Check if the number of rows is odd or not
             cout << "This is row " << (i+1) << ", The content is: ";
             for (int j = 0; j < numColumns; j++)
                 {
                 system("Color 02");
-                cout << table[i][j] << " ";
+                cout << table[i][j] << " ";  //Print out the content of the rows if the number of rows is odd
                 }
             cout << endl;}
         }
@@ -1118,15 +1124,15 @@ struct Program
     //EVENROWS
     void evenrows() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: evenrows");
-    else if (numWords == 1)
+    else if (numWords == 1) //Check Syntax
     for (int i = 0; i < numRows; i++)
         {
-            if ((i-1) % 2 == 0){
+            if ((i-1) % 2 == 0){ //Check if the number of rows is even or not
             cout << "This is row " << (i+1) << ", The content is: ";
             for (int j = 0; j < numColumns; j++)
                 {
                 system("Color 02");
-                cout << table[i][j] << " ";
+                cout << table[i][j] << " "; //Print out the content of the rows if the number of rows is even
                 }
             cout << endl;}
         }
@@ -1136,7 +1142,7 @@ struct Program
     bool PrimeTester(int x) {
     if (x <= 1) // 0 is not a prime number
         return false;
-    for (int i = 2; i <= sqrt(x); ++i) {
+    for (int i = 2; i <= sqrt(x); ++i) { //Check if the value is prime number or not
         if (x % i == 0)
             return false;
         }
@@ -1146,18 +1152,19 @@ struct Program
     //PRIMES
     void primes() {
     if (!correctSyntax) errorPrinter("syntax error\nCommand: primes <column>");
-        else if (numWords == 2)
+        else if (numWords == 2) //Check Syntax
         {
             int columnNumber = checkColumn(commandWords[1], columnNames);
-            if (columnNumber == -1) errorPrinter("column does not exist");
+            if (columnNumber == -1) errorPrinter("column does not exist"); //Check if the column exist or not
             else
             {
                 for (int i = 0; i < numRows; i++)
                 {
                     system("Color 02");
-                    int x = stoi(table[i][columnNumber]);
-                    if (PrimeTester(x)) cout << x << endl;
+                    int x = stoi(table[i][columnNumber]); //Take the value of specified column,determine if its prime number or not
+                    if (PrimeTester(x)) cout << x << endl; //Then output the content of the specified column if the value is a prime number
                 }
+                cout << "# Primes number finished checking #" << endl;
             }
         }
     }   
