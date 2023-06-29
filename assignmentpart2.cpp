@@ -317,7 +317,7 @@ float findMedian(vector<vector<string>> table, int columnNumber, int numRows)
 }
 
 struct Program
-{
+{ // struct to store all the variables and functions
     int numWords, numColumns, numRows, modeNumber;
     string command;
     vector<string> commandWords, columnNames, columnTypes, modeList;
@@ -995,10 +995,10 @@ struct Program
     int countNumbers(int columnNumber, int n){ // takes an integer and counts the number of times it occurs in a column
         int count = 0;
         for (int i = 0; i < numRows; i++)
-        {
-            if (stoi(table[i][columnNumber]) == n) count++;
+        { // for each row
+            if (stoi(table[i][columnNumber]) == n) count++; // if the number in the column is equal to the number, increment the count
         }
-        return count;
+        return count; // return the count
     }
 
     void countOccurences(vector<int>&numbers, vector<int>&numbersCounter, int columnNumber){
