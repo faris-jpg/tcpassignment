@@ -496,17 +496,20 @@ struct Program
             else{
                 system("Color 02");
                 inputFile << numColumns << endl << numRows << endl;
-                for (const string& columnName : columnNames) {
-                    inputFile << columnName << ' ';}
+                for (int i = 0; i < columnNames.size(); i++){
+                    inputFile << columnNames[i];
+                    if (i != columnNames.size() - 1) inputFile << ',';}
                 inputFile << endl;
-                for (const string& columnType : columnTypes) {
-                    inputFile << columnType << ' ';}
+                for (int i = 0; i < columnTypes.size(); i++) {
+                    inputFile << columnTypes[i];
+                    if (i != columnTypes.size() - 1) inputFile << ',';}
                 inputFile << endl;
                 for (int i = 0; i < numRows; i++){
                     for (int j = 0; j < numColumns; j++){
                         system("Color 02");
-                        inputFile << table[i][j] << " ";}
-                inputFile << endl;}
+                        inputFile << table[i][j];
+                        if (j != numColumns - 1) inputFile << ',';}
+                        inputFile << endl;}
                 inputFile.close(); // closes the file
                 cout << "File successfully stored, the name of the file is " << commandWords[1] << endl;}
         }
