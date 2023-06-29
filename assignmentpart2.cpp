@@ -1180,8 +1180,7 @@ struct Program
             {
                 table.erase(table.begin() + i);
                 numRows--;
-            }
-            i++; 
+            } else i++; 
         } system("Color 02"); 
         cout << "Deleted row containing " << occurnum << endl;
     }
@@ -1233,18 +1232,18 @@ struct Program
             }
 
     void replace(){ //REPLACE
-        string firstvalue = commandWords[1];
-        string secondvalue = commandWords[2];
-        if (numWords == 3){
+        string firstvalue = commandWords[1]; string secondvalue = commandWords[2];
+        if (numWords == 3) {
         for (int i = 0; i < numRows; i++)
         {
             for (int z = 0; z < numColumns; z++){
                 if (table[i][z] == firstvalue)
                     table[i][z] = secondvalue;}
         }   
-        system("Color 02");
-        cout << "replaced every number = " <<  firstvalue
-        << " in all columns with " << secondvalue << "\n"; }
+            system("Color 02");
+            cout << "replaced every number = " <<  firstvalue << " in all columns with " << secondvalue << "\n"; 
+        }
+        
         else if (numWords == 4){
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1) errorPrinter("column does not exist");
@@ -1258,8 +1257,7 @@ struct Program
                 system("Color 02");
                 cout << "Replaced all " << commandWords[2] << " to " << commandWords[3] << " for column " << commandWords[1] << endl;
             }
-        }
-        else errorPrinter("syntax error\nCommand: replace");
+        } else errorPrinter("syntax error\nCommand: replace");
     }
 };
 
