@@ -160,10 +160,10 @@ float findMax(vector<vector<string>> table, int columnNumber, int numRows){
 int findMax(vector<int>table, int numRows){ //function overloaded for histogram
     int max = table[0]; // sets the maximum to the first value in the column
     for (int j = 1; j < numRows; j++)
-    { 
+    {  //loops through the column
         if (table[j] > max)
-        {
-            max = table[j];
+        { // if the value is more than the current maximum, set the maximum to that value
+            max = table[j]; 
         }
     }
     return max;
@@ -206,19 +206,19 @@ vector<int> sortColumn(vector<int> &column)
     vector<int> sortedColumn;
     int min, minIndex;
     for (int i = 0; i < column.size(); i++)
-    {
-        min = (column[i]);
-        minIndex = i;
+    { // loops through the column
+        min = (column[i]); // sets the minimum to the first value in the column
+        minIndex = i; // sets the minimum index to the first index in the column
         for (int j = i + 1; j < column.size(); j++)
         {
             if ((column[j]) < min)
-            {
+            { // if the value is less than the current minimum, set the minimum to that value and update the index
                 min = (column[j]);
                 minIndex = j;
             }
         }
-        sortedColumn.push_back(min);
-        column[minIndex] = column[i];
+        sortedColumn.push_back(min); // adds the minimum value to the sorted column
+        column[minIndex] = column[i]; // swaps the minimum value with the current value
     }
     return sortedColumn;
 }
@@ -322,7 +322,7 @@ struct Program
     string command;
     vector<string> commandWords, columnNames, columnTypes, modeList;
     vector<vector<string>> table;
-    bool correctSyntax;
+    bool correctSyntax, dataLoaded = false;
 
     Program()
     { // constructor
@@ -349,8 +349,8 @@ struct Program
         else correctSyntax = checkSyntax2(commandWords, modeNumber, numColumns);
     }
     void runner(){ // runs the correct function based on the mode number, seperated into four functions to be compact
-        if (modeNumber == -1)
-            errorPrinter("invalid command");
+        if(!dataLoaded && (modeNumber != 4 && modeNumber != 23 && modeNumber != 27 && modeNumber != 31)) errorPrinter("no data loaded"); // checks if data is loaded
+        else if (modeNumber == -1) errorPrinter("invalid command");
         else if (modeNumber <= 8) runner1();
         else if (modeNumber <= 17) runner2();
         else if (modeNumber <= 26) runner3();
@@ -535,6 +535,8 @@ struct Program
             else if(numWords == 2) 
             {
                 if (!checkHTML(commandWords[1])) errorPrinter("syntax error\nhtml <filename.html>");
+                else if (!dataLoaded)
+                errorPrinter("no data loaded");
                 else {
                     system("Color 02");
                     constructHTML(commandWords[1]);
@@ -588,23 +590,23 @@ struct Program
         else if (numWords == 1)
         { // if no column is specified, find the minimum of all the columns
             for (int i = 0; i < numColumns; i++)
-            {
+            { // loops through columns
                 if (columnTypes[i] == "number")
                 { // checks if the column is of type number
                     system("Color 02");
-                    cout << "minimum of column " << columnNames[i] << " is " << findMin(table, i, numRows) << endl;
+                    cout << "minimum of column " << columnNames[i] << " is " << findMin(table, i, numRows) << endl; // outputs the minimum of the column
                 }
             }
         }
         else
         { // if a column is specified, find the minimum of that column
-            int columnNumber = checkColumn(commandWords[1], columnNames);
+            int columnNumber = checkColumn(commandWords[1], columnNames); // checks if the column exists
             if (columnNumber == -1 || columnTypes[columnNumber] != "number")
                 errorPrinter("column must exist and must be of type number"); // checks if the column exists and is of type number
             else
             {                
                 system("Color 02");
-                cout << "minimum of column " << columnNames[columnNumber] << " is " << findMin(table, columnNumber, numRows) << endl;
+                cout << "minimum of column " << columnNames[columnNumber] << " is " << findMin(table, columnNumber, numRows) << endl; // outputs the minimum of the column
             }
         }
     }
@@ -614,7 +616,7 @@ struct Program
         else if (numWords == 1)
         {
             for (int i = 0; i < numColumns; i++)
-            {
+            { // for each column
                 if (columnTypes[i] == "number")
                 { // checks if the column is of type number
                     system("Color 02");
@@ -626,11 +628,11 @@ struct Program
         { 
             int columnNumber = checkColumn(commandWords[1], columnNames);
             if (columnNumber == -1 || columnTypes[columnNumber] != "number")
-                errorPrinter("column does not exist and must be of type number");
+                errorPrinter("column does not exist and must be of type number"); // checks if the column exists and is of type number
             else
             {                
                 system("Color 02");
-                cout << "maximum of column " << columnNames[columnNumber] << " is " << findMax(table, columnNumber, numRows) << endl;
+                cout << "maximum of column " << columnNames[columnNumber] << " is " << findMax(table, columnNumber, numRows) << endl; // outputs the maximum of the column
             }
         }
 
@@ -646,7 +648,7 @@ struct Program
                 system("Color 02");
                 if (columnTypes[i] == "number")
                     cout << "median of column " << columnNames[i] << " is " 
-                         << findMedian(table, i, numRows) << endl;
+                         << findMedian(table, i, numRows) << endl; // outputs the median of the column
             }
         }
         else
@@ -657,7 +659,7 @@ struct Program
             {   
                 system("Color 02");
                 cout << "median of column " << columnNames[columnNumber] << " is " 
-                     << findMedian(table, columnNumber, numRows) << endl;
+                     << findMedian(table, columnNumber, numRows) << endl; // outputs the median of the column
             }
         }
     }
